@@ -19,7 +19,7 @@ function getRandomIntInclusive(min, max) {
 
   return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
 }
-getRandomIntInclusive(0, 100);
+console.log(getRandomIntInclusive(1, 10));
 
 
 // Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
@@ -36,14 +36,14 @@ getRandomIntInclusive(0, 100);
 // может быть в десятых, сотых, тысячных и т. д. долях.
 // Например, 1.1, 1.2 — корректный диапазон.
 
-https://question-it.com/questions/1483098/generatsija-sluchajnogo-chisla-mezhdu-dvumja-chislami-v-javascript
+// https://question-it.com/questions/1483098/generatsija-sluchajnogo-chisla-mezhdu-dvumja-chislami-v-javascript
 
 function randomFloatFromInterval (min, max, fractionDigits) {
-  if (min < 0 || max < 0 || min >= max || fractionDigits <=0) {
+  if (min < 0 || max < 0 || min >= max || fractionDigits <= 0) {
     alert('В диапазоне указаны неверные числа.\nВведите пожалуйста правильные числа.');
     return '';
   }
   const fractionMultiplier = Math.pow(10, fractionDigits)
   return Math.round((Math.random() * (max - min) + min) * fractionMultiplier) / fractionMultiplier;
 }
-randomFloatFromInterval(-10, 10, 1);
+console.log(randomFloatFromInterval(1, 10, 1));
