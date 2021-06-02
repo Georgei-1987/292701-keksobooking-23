@@ -19,7 +19,7 @@ function getRandomIntInclusive(min, max) {
 
   return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
 }
-alert(getRandomIntInclusive(0, 100));
+getRandomIntInclusive(0, 100);
 
 
 // Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
@@ -46,4 +46,4 @@ function randomFloatFromInterval (min, max, fractionDigits) {
   const fractionMultiplier = Math.pow(10, fractionDigits)
   return Math.round((Math.random() * (max - min) + min) * fractionMultiplier) / fractionMultiplier;
 }
-alert(randomFloatFromInterval(-10, 10, 1));
+randomFloatFromInterval(-10, 10, 1);
