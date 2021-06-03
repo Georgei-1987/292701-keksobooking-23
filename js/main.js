@@ -19,7 +19,7 @@ function getRandomIntInclusive(min, max) {
 
   return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
 }
-console.log(getRandomIntInclusive(1, 10));
+console.log(getRandomIntInclusive(2, 10));
 
 
 // Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
