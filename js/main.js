@@ -11,7 +11,7 @@
 
 function getRandomIntInclusive(min, max) {
   if (min <0 || max < 0 || min >= max) {
-    console.log('В диапазоне указаны неверные числа.\nВведите пожалуйста правильные числа.');
+    // console.log('В диапазоне указаны неверные числа.\nВведите пожалуйста правильные числа.');
     return '';
   }
   min = Math.ceil(min);
@@ -40,7 +40,7 @@ getRandomIntInclusive(2, 10);
 
 function randomFloatFromInterval (min, max, fractionDigits) {
   if (min < 0 || max < 0 || min >= max || fractionDigits <= 0) {
-    console.log('В диапазоне указаны неверные числа.\nВведите пожалуйста правильные числа.');
+    // console.log('В диапазоне указаны неверные числа.\nВведите пожалуйста правильные числа.');
     return '';
   }
   const fractionMultiplier = Math.pow(10, fractionDigits);
