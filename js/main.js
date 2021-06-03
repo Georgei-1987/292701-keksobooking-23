@@ -11,7 +11,7 @@
 
 function getRandomIntInclusive(min, max) {
   if (min <0 || max < 0 || min >= max) {
-    alert('В диапазоне указаны неверные числа.\nВведите пожалуйста правильные числа.');
+    console.log('В диапазоне указаны неверные числа.\nВведите пожалуйста правильные числа.');
     return '';
   }
   min = Math.ceil(min);
@@ -19,7 +19,7 @@ function getRandomIntInclusive(min, max) {
 
   return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
 }
-console.log(getRandomIntInclusive(2, 10));
+getRandomIntInclusive(2, 10);
 
 
 // Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
@@ -40,10 +40,10 @@ console.log(getRandomIntInclusive(2, 10));
 
 function randomFloatFromInterval (min, max, fractionDigits) {
   if (min < 0 || max < 0 || min >= max || fractionDigits <= 0) {
-    alert('В диапазоне указаны неверные числа.\nВведите пожалуйста правильные числа.');
+    console.log('В диапазоне указаны неверные числа.\nВведите пожалуйста правильные числа.');
     return '';
   }
-  const fractionMultiplier = Math.pow(10, fractionDigits)
+  const fractionMultiplier = Math.pow(10, fractionDigits);
   return Math.round((Math.random() * (max - min) + min) * fractionMultiplier) / fractionMultiplier;
 }
-console.log(randomFloatFromInterval(1, 10, 1));
+randomFloatFromInterval(1, 10, 1);
