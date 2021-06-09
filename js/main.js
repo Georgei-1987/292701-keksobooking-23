@@ -41,13 +41,13 @@ const createRandomMassive = function (massive, quantity) {
   const number = getRandomPositiveInteger (1, quantity);
   const finalMassive = [];
   let element;
-  for (let i = 0; i < number; i++) {
+  for (let index = 0; index < number; index++) {
     element = massive[getRandomPositiveInteger (0, quantity - 1)];
     while (finalMassive.includes(element)) {
       element = massive[getRandomPositiveInteger (0, quantity - 1)];
     }
 
-    finalMassive[i] = element;
+    finalMassive[index] = element;
   }
 
   return finalMassive;
@@ -75,7 +75,7 @@ const createObject = function () {
       lat: 'null',
       lng: 'null',
     },
-  }
+  };
 
 
   object.author.avatar = createImgAddress();
@@ -98,9 +98,3 @@ const createObject = function () {
 for (let i = 0; i < 10; i++) {
   massiveObjects[i] = createObject();
 }
-
-console.log(massiveObjects);
-
-
-
-
