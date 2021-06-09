@@ -1,46 +1,106 @@
-
-//Источник: https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-
-/**
- * Возвращает случайное число из указанного диапазона (min и max входят в диапазон).
- *
- * @param {number} min Нижний предел.
- * @param {number} max Верхний предел.
- */
-
-function getRandomIntInclusive(min, max) {
-  if (min <0 || max < 0 || min >= max) {
-
-    return null;
-  }
-
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+const massive = [];
+const massiveProperty = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
+const massiveCheck = ['12:00', '13:00', '14:00'];
+const massiveFeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+const massivePhotos = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
+'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
+'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'];
+const descriptionProperty = {
+  palace: 'Величественный дворец на берегу Тихого океана',
+  flat: 'Комфортабельная квартира в спальном районе',
+  house: 'Уютный дом на краю леса',
+  bungalow: 'Небольшой коттедж на территории отеля',
+  hotel: 'Пятизвёздочный отель недалеко от Красного моря',
 }
 
-getRandomIntInclusive(2, 10);
+function getRandomPositiveInteger (a, b) {
+  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
+  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+  const result = Math.random() * (upper - lower + 1) + lower;
 
-//Источник: https://question-it.com/questions/1483098/generatsija-sluchajnogo-chisla-mezhdu-dvumja-chislami-v-javascript
-
-/**
- * Возвращает случайное число с плавающей точкой с "указанным количеством знаков после запятой"
- * (min и max входят в диапазон).
- *
- * @param {number} min Нижний предел.
- * @param {number} max Верхний предел.
- */
-
-function getRandomFloatInclusive(min, max, fractionDigits) {
-  if (min < 0 || max < 0 || min >= max || fractionDigits <= 0) {
-
-    return null;
-  }
-
-  const fractionMultiplier = Math.pow(10, fractionDigits);
-
-  return Math.round((Math.random() * (max - min) + min) * fractionMultiplier) / fractionMultiplier;
+  return Math.floor(result);
 }
 
-getRandomFloatInclusive(1, 10, 1);
+function getRandomPositiveFloat (a, b, digits = 1) {
+  const lower = Math.min(Math.abs(a), Math.abs(b));
+  const upper = Math.max(Math.abs(a), Math.abs(b));
+  const result = Math.random() * (upper - lower) + lower;
+
+  return result.toFixed(digits);
+}
+
+const createImgAddress = function () {
+  const random =  getRandomPositiveInteger(1, 10);
+  if (random !== 10) {
+    return 'img/avatars/user0' + random + '.png';
+  }
+  return 'img/avatars/user10.png';
+}
+
+const createRandomMassive = function (massive, quantity) {
+  const number = getRandomPositiveInteger (1, quantity);
+  const finalMassive = [];
+  let element;
+  for (let i = 0; i <= getRandomPositiveInteger (0, quantity - 1); i++) {
+    element = massive[getRandomPositiveInteger (0, quantity - 1)];
+    while (finalMassive.includes(element)) {
+      element = massive[getRandomPositiveInteger (0, quantity - 1)];
+    }
+
+    finalMassive[i] = element;
+  }
+
+  return finalMassive;
+}
+
+const createObject = function () {
+  const object = {
+      author: {
+        avatar: 'null',
+      },
+      offer: {
+        title: 'Сдам жильё',
+        address: 'null',
+        price: 'null',
+        type: 'null',
+        rooms: 'null',
+        guests: 'null',
+        checkin: 'null',
+        checkout: 'null',
+        features: 'null',
+        description: 'null',
+        photos: 'null',
+
+      },
+      location: {
+        lat: 'null',
+        lng: 'null',
+      },
+  }
+
+  object.author.avatar = createImgAddress();
+  object.offer.address = getRandomPositiveInteger (0, 90) + ', ' + getRandomPositiveInteger (0, 180);
+  object.offer.price = getRandomPositiveInteger (0, 1000000);
+  object.offer.type = massiveProperty[getRandomPositiveInteger (0, 4)];
+  object.offer.rooms = getRandomPositiveInteger (1, 7);
+  object.offer.guests = getRandomPositiveInteger (1, 21);
+  object.offer.checkin = massiveCheck[getRandomPositiveInteger (0, 2)];
+  object.offer.checkout = massiveCheck[getRandomPositiveInteger (0, 2)];
+  object.offer.features = createRandomMassive(massiveFeatures, 6);
+  object.offer.description = descriptionProperty[object.offer.type];
+  object.offer.photos = createRandomMassive(massivePhotos, 3);
+  object.location.lat = getRandomPositiveFloat (35.65, 35.7, digits = 2);
+  object.location.lng = getRandomPositiveFloat (139.7, 139.8, digits = 1);
+
+  return object;
+}
+
+for (let i = 0; i < 10; i++) {
+  massive[i] = createObject();
+}
+
+console.log(massive);
+
+
+
+
