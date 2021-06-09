@@ -21,7 +21,7 @@ function getRandomPositiveInteger (first, second) {
   return Math.floor(result);
 }
 
-function getRandomPositiveFloat (first, second, digits = 1) {
+function getRandomPositiveFloat (first, second, digits) {
   const lower = Math.min(Math.abs(first), Math.abs(second));
   const upper = Math.max(Math.abs(first), Math.abs(second));
   const result = Math.random() * (upper - lower) + lower;
@@ -76,7 +76,7 @@ const createObject = function () {
       lng: 'null',
     },
   }
-};
+
 
   object.author.avatar = createImgAddress();
   object.offer.address = getRandomPositiveInteger (0, 90) + ', ' + getRandomPositiveInteger (0, 180);
@@ -89,11 +89,11 @@ const createObject = function () {
   object.offer.features = createRandomMassive(massiveFeatures, 6);
   object.offer.description = descriptionProperty[object.offer.type];
   object.offer.photos = createRandomMassive(massivePhotos, 3);
-  object.location.lat = getRandomPositiveFloat (35.65, 35.7, digits = 2);
-  object.location.lng = getRandomPositiveFloat (139.7, 139.8, digits = 1);
+  object.location.lat = getRandomPositiveFloat (35.65, 35.7, 2);
+  object.location.lng = getRandomPositiveFloat (139.7, 139.8, 1);
 
   return object;
-}
+};
 
 for (let i = 0; i < 10; i++) {
   massiveObjects[i] = createObject();
