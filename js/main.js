@@ -1,4 +1,4 @@
-const massive = [];
+const massiveObjects = [];
 const massiveProperty = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const massiveCheck = ['12:00', '13:00', '14:00'];
 const massiveFeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -21,7 +21,7 @@ function getRandomPositiveInteger (first, second) {
   return Math.floor(result);
 }
 
-function getRandomPositiveFloat (afirst, second, digits = 1) {
+function getRandomPositiveFloat (first, second, digits = 1) {
   const lower = Math.min(Math.abs(first), Math.abs(second));
   const upper = Math.max(Math.abs(first), Math.abs(second));
   const result = Math.random() * (upper - lower) + lower;
@@ -35,13 +35,13 @@ const createImgAddress = function () {
     return 'img/avatars/user0' + random + '.png';
   }
   return 'img/avatars/user10.png';
-}
+};
 
 const createRandomMassive = function (massive, quantity) {
   const number = getRandomPositiveInteger (1, quantity);
   const finalMassive = [];
   let element;
-  for (let i = 0; i <= getRandomPositiveInteger (0, quantity - 1); i++) {
+  for (let i = 0; i < number; i++) {
     element = massive[getRandomPositiveInteger (0, quantity - 1)];
     while (finalMassive.includes(element)) {
       element = massive[getRandomPositiveInteger (0, quantity - 1)];
@@ -51,32 +51,31 @@ const createRandomMassive = function (massive, quantity) {
   }
 
   return finalMassive;
-}
+};
 
 const createObject = function () {
   const object = {
-      author: {
-        avatar: 'null',
-      },
-      offer: {
-        title: 'Сдам жильё',
-        address: 'null',
-        price: 'null',
-        type: 'null',
-        rooms: 'null',
-        guests: 'null',
-        checkin: 'null',
-        checkout: 'null',
-        features: 'null',
-        description: 'null',
-        photos: 'null',
-
-      },
-      location: {
-        lat: 'null',
-        lng: 'null',
-      },
-  }
+    author: {
+      avatar: 'null',
+    },
+    offer: {
+      title: 'Сдам жильё',
+      address: 'null',
+      price: 'null',
+      type: 'null',
+      rooms: 'null',
+      guests: 'null',
+      checkin: 'null',
+      checkout: 'null',
+      features: 'null',
+      description: 'null',
+      photos: 'null',
+    },
+    location: {
+      lat: 'null',
+      lng: 'null',
+    },
+}
 
   object.author.avatar = createImgAddress();
   object.offer.address = getRandomPositiveInteger (0, 90) + ', ' + getRandomPositiveInteger (0, 180);
@@ -96,10 +95,10 @@ const createObject = function () {
 }
 
 for (let i = 0; i < 10; i++) {
-  massive[i] = createObject();
+  massiveObjects[i] = createObject();
 }
 
-console.log(massive);
+console.log(massiveObjects);
 
 
 
