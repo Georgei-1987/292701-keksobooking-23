@@ -3,27 +3,27 @@ const massiveProperty = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const massiveCheck = ['12:00', '13:00', '14:00'];
 const massiveFeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const massivePhotos = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
-'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
-'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'];
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'];
 const descriptionProperty = {
   palace: 'Величественный дворец на берегу Тихого океана',
   flat: 'Комфортабельная квартира в спальном районе',
   house: 'Уютный дом на краю леса',
   bungalow: 'Небольшой коттедж на территории отеля',
   hotel: 'Пятизвёздочный отель недалеко от Красного моря',
-}
+};
 
-function getRandomPositiveInteger (a, b) {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+function getRandomPositiveInteger (first, second) {
+  const lower = Math.ceil(Math.min(Math.abs(first), Math.abs(second)));
+  const upper = Math.floor(Math.max(Math.abs(first), Math.abs(second)));
   const result = Math.random() * (upper - lower + 1) + lower;
 
   return Math.floor(result);
 }
 
-function getRandomPositiveFloat (a, b, digits = 1) {
-  const lower = Math.min(Math.abs(a), Math.abs(b));
-  const upper = Math.max(Math.abs(a), Math.abs(b));
+function getRandomPositiveFloat (afirst, second, digits = 1) {
+  const lower = Math.min(Math.abs(first), Math.abs(second));
+  const upper = Math.max(Math.abs(first), Math.abs(second));
   const result = Math.random() * (upper - lower) + lower;
 
   return result.toFixed(digits);
