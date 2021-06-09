@@ -75,7 +75,8 @@ const createObject = function () {
       lat: 'null',
       lng: 'null',
     },
-}
+  }
+};
 
   object.author.avatar = createImgAddress();
   object.offer.address = getRandomPositiveInteger (0, 90) + ', ' + getRandomPositiveInteger (0, 180);
