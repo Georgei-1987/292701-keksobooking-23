@@ -99,7 +99,7 @@ const getObject = function () {
     },
     offer: {
       title: 'Сдам жильё',
-      address: lat + ', ' + lng,
+      address: `${lat}, ${lng}`,
       price: getRandomPositiveInteger (0, MAX_PRICE_OF_DWELLING),
       type: arrayProperty[descr],
       rooms: getRandomPositiveInteger (1, MAX_NUMBER_OF_ROOMS),
@@ -116,3 +116,5 @@ const getObject = function () {
 const getArrayObjects = function() {
   return new Array(ARRAY_LENGTH).fill().map(getObject);
 };
+
+console.log ( getArrayObjects() );
