@@ -28,7 +28,7 @@ const descriptionProperty = {
   hotel: 'Пятизвёздочный отель недалеко от Красного моря',
 };
 
-function getRandomPositiveInteger (first, second) {
+const getRandomPositiveInteger = (first, second)=> {
   const lower = Math.ceil(Math.min(Math.abs(first), Math.abs(second)));
   const upper = Math.floor(Math.max(Math.abs(first), Math.abs(second)));
   const result = Math.random() * (upper - lower + 1) + lower;
@@ -36,7 +36,7 @@ function getRandomPositiveInteger (first, second) {
   return Math.floor(result);
 }
 
-function getRandomPositiveFloat (first, second, digits) {
+const getRandomPositiveFloat = (first, second, digits) => {
   const lower = Math.min(Math.abs(first), Math.abs(second));
   const upper = Math.max(Math.abs(first), Math.abs(second));
   const result = Math.random() * (upper - lower) + lower;
@@ -67,7 +67,7 @@ const makeUniqueRandomIntegerGenerator = (max) => {
 
 const getUniqueRandomInteger = makeUniqueRandomIntegerGenerator(AVATAR_NUMBER);
 
-const getRandomArray = function (array, quantity) {
+const getRandomArray = (array, quantity) => {
   const number = getRandomPositiveInteger (1, quantity);
   const finalArray = [];
   let element;
@@ -84,7 +84,7 @@ const getRandomArray = function (array, quantity) {
   return finalArray;
 };
 
-const getObject = function () {
+const getObject = () => {
   const descr = getRandomPositiveInteger (0, PROPERTY_LENGTH - 1);
   const lat = getRandomPositiveFloat (MIN_LATITUDE, MAX_LATITUDE, ROUNDING_FOR_LOCATION);
   const lng = getRandomPositiveFloat (MIN_LONGITUDE, MAX_LONGITUDE, ROUNDING_FOR_LOCATION);
@@ -113,7 +113,7 @@ const getObject = function () {
   };
 };
 
-const getArrayObjects = function() {
+const getArrayObjects = () => {
   return new Array(ARRAY_LENGTH).fill().map(getObject);
 };
 
