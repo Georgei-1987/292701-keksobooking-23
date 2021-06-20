@@ -99,8 +99,6 @@ const getObject = () => {
   };
 };
 
-const getArrayObjects = () => {
-  return new Array(ARRAY_LENGTH).fill().map(getObject);
-};
+const getArrayObjects = () => new Array(ARRAY_LENGTH).fill().map(getObject);
 
 export {getArrayObjects};
