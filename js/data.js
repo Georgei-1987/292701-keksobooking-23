@@ -1,5 +1,5 @@
-import {getRandomPositiveInteger} from './generate-numbers.js';
-import {getRandomPositiveFloat} from './generate-numbers.js';
+import {getRandomPositiveInteger} from './utils/get-random-positive-integer.js';
+import {getRandomPositiveFloat} from './utils/get-random-positive-float.js';
 
 const ARRAY_LENGTH = 10;
 const AVATAR_NUMBER = 10;
