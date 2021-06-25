@@ -30,12 +30,12 @@ const generateNotice = (notice) => {
   noticeElement.querySelector('.popup__text--time').textContent = `Заезд после ${notice.offer.checkin}, выезд до ${notice.offer.checkout}`;
   const featuresList = noticeElement.querySelector('.popup__features');
   const featuresElements = noticeElement.querySelectorAll('.popup__feature');
-  for (let element of featuresElements) {
+  for (const element of featuresElements) {
     element.style.display = 'none';
   }
 
   const featuresArray = notice.offer.features;
-  for (let feature of featuresArray) {
+  for (const feature of featuresArray) {
     switch (feature) {
       case 'wifi':
         noticeElement.querySelector('.popup__feature--wifi').style.display = '';
@@ -69,7 +69,7 @@ const generateNotice = (notice) => {
   const popupPhoto = noticeElement.querySelector('.popup__photo');
   popupPhoto.style.display = 'none';
   const arraySources = notice.offer.photos;
-  for (let src of arraySources) {
+  for (const src of arraySources) {
     const element = popupPhoto.cloneNode(true);
     element.src = src;
     element.style.display = '';
