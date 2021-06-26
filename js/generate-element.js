@@ -76,7 +76,7 @@ const generateNotice = (notice) => {
     popupPhotos.appendChild(element);
   }
 
-  noticeElement.querySelector('.popup__avatar').textContent = notice.offer.description;
+  noticeElement.querySelector('.popup__avatar').src = notice.author.avatar;
 
   mapCanvas.appendChild(noticeElement);
 };
