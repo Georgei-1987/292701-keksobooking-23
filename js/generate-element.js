@@ -1,84 +1,139 @@
 import './data.js';
-// import {getArrayObjects} from './data.js';
 
 const noticeTemplate = document.querySelector('#card').content;
-const mapCanvas = document.querySelector('#map-canvas');
+const objectType = {
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель',
+};
 
-const generateNotice = (notice) => {
-  const noticeElement = noticeTemplate.cloneNode(true);
-  noticeElement.querySelector('.popup__title').textContent = notice.offer.title;
-  noticeElement.querySelector('.popup__text--address').textContent = notice.offer.address;
-  noticeElement.querySelector('.popup__text--price').textContent = `${notice.offer.price} руб/ночь`;
-  switch (notice.offer.type) {
-    case 'flat':
-      noticeElement.querySelector('.popup__type').textContent = 'Квартира';
-      break;
-    case 'bungalow':
-      noticeElement.querySelector('.popup__type').textContent = 'Бунгало';
-      break;
-    case 'house':
-      noticeElement.querySelector('.popup__type').textContent = 'Дом';
-      break;
-    case 'palace':
-      noticeElement.querySelector('.popup__type').textContent = 'Дворец';
-      break;
-    case 'hotel':
-      noticeElement.querySelector('.popup__type').textContent = 'Отель';
-      break;
-  }
-  noticeElement.querySelector('.popup__text--capacity').textContent = `${notice.offer.rooms} комнаты для ${notice.offer.guests} гостей`;
-  noticeElement.querySelector('.popup__text--time').textContent = `Заезд после ${notice.offer.checkin}, выезд до ${notice.offer.checkout}`;
-  const featuresList = noticeElement.querySelector('.popup__features');
-  const featuresElements = noticeElement.querySelectorAll('.popup__feature');
-  for (const element of featuresElements) {
-    element.style.display = 'none';
+const addPropertyTitle = (element, property) => {
+  element.querySelector('.popup__title').textContent = property;
+
+  return element;
+}
+
+const addPropertyAddress = (element, property) => {
+  element.querySelector('.popup__text--address').textContent = property;
+
+  return element;
+}
+
+const addPropertyPrice = (element, property) => {
+  element.querySelector('.popup__text--price').textContent = `${property} руб/ночь`;
+
+  return element;
+}
+
+const addPropertyType = (element, property) => {
+  element.querySelector('.popup__type').textContent = objectType[property];
+  
+  return element;
+}
+
+const addPropertyCapacity = (element, property_1, property_2) => {
+  element.querySelector('.popup__text--capacity').textContent = `${property_1} комнаты для ${property_2} гостей`;
+
+  return element;
+}
+
+const addPropertyTime = (element, property_1, property_2) => {
+  element.querySelector('.popup__text--time').textContent = `Заезд после ${property_1}, выезд до ${property_2}`;
+
+  return element;
+}
+
+const addPropertyFeature = (element, property) => {
+  const featuresList = element.querySelector('.popup__features');
+  const featuresElements = element.querySelectorAll('.popup__feature');
+  const featureWifi = element.querySelector('.popup__feature--wifi');
+  const featureDishwasher = element.querySelector('.popup__feature--dishwasher');
+  const featureParking = element.querySelector('.popup__feature--parking');
+  const featureWasher = element.querySelector('.popup__feature--washer');
+  const featureElevator = element.querySelector('.popup__feature--elevator');
+  const featureConditioner = element.querySelector('.popup__feature--conditioner');
+
+  for (const elem of featuresElements) {
+    elem.style.display = 'none';
   }
 
-  const featuresArray = notice.offer.features;
+  const featuresArray = property;
   for (const feature of featuresArray) {
     switch (feature) {
       case 'wifi':
-        noticeElement.querySelector('.popup__feature--wifi').style.display = '';
-        featuresList.appendChild(noticeElement.querySelector('.popup__feature--wifi'));
+        featureWifi.style.display = '';
+        featuresList.appendChild(featureWifi);
         break;
       case 'dishwasher':
-        noticeElement.querySelector('.popup__feature--dishwasher').style.display = '';
-        featuresList.appendChild(noticeElement.querySelector('.popup__feature--dishwasher'));
+        featureDishwasher.style.display = '';
+        featuresList.appendChild(featureDishwasher);
         break;
       case 'parking':
-        noticeElement.querySelector('.popup__feature--parking').style.display = '';
-        featuresList.appendChild(noticeElement.querySelector('.popup__feature--parking'));
+        featureParking.style.display = '';
+        featuresList.appendChild(featureParking);
         break;
       case 'washer':
-        noticeElement.querySelector('.popup__feature--washer').style.display = '';
-        featuresList.appendChild(noticeElement.querySelector('.popup__feature--washer'));
+        featureWasher.style.display = '';
+        featuresList.appendChild(featureWasher);
         break;
       case 'elevator':
-        noticeElement.querySelector('.popup__feature--elevator').style.display = '';
-        featuresList.appendChild(noticeElement.querySelector('.popup__feature--elevator'));
+        featureElevator.style.display = '';
+        featuresList.appendChild(featureElevator);
         break;
       case 'conditioner':
-        noticeElement.querySelector('.popup__feature--conditioner').style.display = '';
-        featuresList.appendChild(noticeElement.querySelector('.popup__feature--conditioner'));
+        featureConditioner.style.display = '';
+        featuresList.appendChild(featureConditioner);
         break;
     }
   }
 
-  noticeElement.querySelector('.popup__description').textContent = notice.offer.description;
-  const popupPhotos = noticeElement.querySelector('.popup__photos');
-  const popupPhoto = noticeElement.querySelector('.popup__photo');
+  return element;
+}
+
+const addPropertyDescription = (element, property) => {
+  element.querySelector('.popup__description').textContent = property;
+
+  return element;
+}
+
+const addPropertyPhoto = (element, property) => {
+  const popupPhotos = element.querySelector('.popup__photos');
+  const popupPhoto = element.querySelector('.popup__photo');
   popupPhoto.style.display = 'none';
-  const arraySources = notice.offer.photos;
+  const arraySources = property;
   for (const src of arraySources) {
-    const element = popupPhoto.cloneNode(true);
-    element.src = src;
-    element.style.display = '';
-    popupPhotos.appendChild(element);
+    const elem = popupPhoto.cloneNode(true);
+    elem.src = src;
+    elem.style.display = '';
+    popupPhotos.appendChild(elem);
   }
 
-  noticeElement.querySelector('.popup__avatar').src = notice.author.avatar;
+  return element;
+}
 
-  mapCanvas.appendChild(noticeElement);
+const addPropertyAvatar = (element, property) => {
+  element.querySelector('.popup__avatar').src = property;
+
+  return element;
+}
+
+const generateNotice = (notice) => {
+  const noticeElement = noticeTemplate.cloneNode(true);
+
+  addPropertyTitle (noticeElement, notice.offer.title);
+  addPropertyAddress (noticeElement, notice.offer.address);
+  addPropertyPrice (noticeElement, notice.offer.price);
+  addPropertyType (noticeElement, notice.offer.type);
+  addPropertyCapacity (noticeElement, notice.offer.rooms, notice.offer.guests);
+  addPropertyTime (noticeElement, notice.offer.checkin, notice.offer.checkout);
+  addPropertyFeature (noticeElement, notice.offer.features);
+  addPropertyDescription (noticeElement, notice.offer.description);
+  addPropertyPhoto (noticeElement, notice.offer.photos);
+  addPropertyAvatar (noticeElement, notice.author.avatar);
+
+  return noticeElement;
 };
 
 export {generateNotice};
