@@ -13,37 +13,37 @@ const addPropertyTitle = (element, property) => {
   element.querySelector('.popup__title').textContent = property;
 
   return element;
-}
+};
 
 const addPropertyAddress = (element, property) => {
   element.querySelector('.popup__text--address').textContent = property;
 
   return element;
-}
+};
 
 const addPropertyPrice = (element, property) => {
   element.querySelector('.popup__text--price').textContent = `${property} руб/ночь`;
 
   return element;
-}
+};
 
 const addPropertyType = (element, property) => {
   element.querySelector('.popup__type').textContent = objectType[property];
-  
-  return element;
-}
-
-const addPropertyCapacity = (element, property_1, property_2) => {
-  element.querySelector('.popup__text--capacity').textContent = `${property_1} комнаты для ${property_2} гостей`;
 
   return element;
-}
+};
 
-const addPropertyTime = (element, property_1, property_2) => {
-  element.querySelector('.popup__text--time').textContent = `Заезд после ${property_1}, выезд до ${property_2}`;
+const addPropertyCapacity = (element, firstProperty, secondProperty) => {
+  element.querySelector('.popup__text--capacity').textContent = `${firstProperty} комнаты для ${secondProperty} гостей`;
 
   return element;
-}
+};
+
+const addPropertyTime = (element, firstProperty, secondProperty) => {
+  element.querySelector('.popup__text--time').textContent = `Заезд после ${firstProperty}, выезд до ${secondProperty}`;
+
+  return element;
+};
 
 const addPropertyFeature = (element, property) => {
   const featuresList = element.querySelector('.popup__features');
@@ -90,13 +90,13 @@ const addPropertyFeature = (element, property) => {
   }
 
   return element;
-}
+};
 
 const addPropertyDescription = (element, property) => {
   element.querySelector('.popup__description').textContent = property;
 
   return element;
-}
+};
 
 const addPropertyPhoto = (element, property) => {
   const popupPhotos = element.querySelector('.popup__photos');
@@ -111,13 +111,13 @@ const addPropertyPhoto = (element, property) => {
   }
 
   return element;
-}
+};
 
 const addPropertyAvatar = (element, property) => {
   element.querySelector('.popup__avatar').src = property;
 
   return element;
-}
+};
 
 const generateNotice = (notice) => {
   const noticeElement = noticeTemplate.cloneNode(true);
