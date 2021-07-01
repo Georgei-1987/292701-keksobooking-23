@@ -84,7 +84,7 @@ const getObject = () => {
       lng: lng,
     },
     offer: {
-      title: 'Сдам жильё',
+      title: 'Сдам жильё ',
       address: `${lat}, ${lng}`,
       price: getRandomPositiveInteger (0, MAX_PRICE_OF_DWELLING),
       type: arrayProperty[descr],
