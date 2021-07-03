@@ -38,22 +38,18 @@ roomNoticeInput.addEventListener('input', (evt) => {
 
   switch (evt.target.value) {
     case '1':
-      // collectionCapacity.removeAttribute('disabled');
       collectionCapacity[0].setAttribute('disabled', '');
       collectionCapacity[1].setAttribute('disabled', '');
       collectionCapacity[3].setAttribute('disabled', '');
       break;
     case '2':
-      // collectionCapacity.removeAttribute('disabled');
       collectionCapacity[0].setAttribute('disabled', '');
       collectionCapacity[3].setAttribute('disabled', '');
       break;
     case '3':
-      // collectionCapacity.removeAttribute('disabled');
       collectionCapacity[3].setAttribute('disabled', '');
       break;
     case '100':
-      // collectionCapacity.removeAttribute('disabled');
       collectionCapacity[0].setAttribute('disabled', '');
       collectionCapacity[1].setAttribute('disabled', '');
       collectionCapacity[2].setAttribute('disabled', '');
