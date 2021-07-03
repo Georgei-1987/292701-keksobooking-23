@@ -31,21 +31,29 @@ priceNoticeInput.addEventListener('input', () => {
 
 roomNoticeInput.addEventListener('input', (evt) => {
   const collectionCapacity = capacityNoticeInput.children;
+  for (const element of collectionCapacity) {
+    element.removeAttribute('disabled');
+    // element.focus();
+  }
 
   switch (evt.target.value) {
     case '1':
+      // collectionCapacity.removeAttribute('disabled');
       collectionCapacity[0].setAttribute('disabled', '');
       collectionCapacity[1].setAttribute('disabled', '');
       collectionCapacity[3].setAttribute('disabled', '');
       break;
     case '2':
+      // collectionCapacity.removeAttribute('disabled');
       collectionCapacity[0].setAttribute('disabled', '');
       collectionCapacity[3].setAttribute('disabled', '');
       break;
     case '3':
+      // collectionCapacity.removeAttribute('disabled');
       collectionCapacity[3].setAttribute('disabled', '');
       break;
     case '100':
+      // collectionCapacity.removeAttribute('disabled');
       collectionCapacity[0].setAttribute('disabled', '');
       collectionCapacity[1].setAttribute('disabled', '');
       collectionCapacity[2].setAttribute('disabled', '');
@@ -68,19 +76,19 @@ titleNoticeInput.addEventListener('input', () => {
 });
 
 typeNoticeInput.addEventListener('input', (evt) => {
-  roomNoticeInput.setAttribute('placeholder', objectTypePrice[evt.target.value]);
+  priceNoticeInput.setAttribute('placeholder', objectTypePrice[evt.target.value]);
 
-  if (roomNoticeInput.value) {
-    const value = roomNoticeInput.value;
+  if (priceNoticeInput.value) {
+    const value = priceNoticeInput.value;
 
     if (value > MAX_PRICE_LENGTH) {
-      roomNoticeInput.setCustomValidity(`Максимальная цена - ${ MAX_PRICE_LENGTH }`);
+      priceNoticeInput.setCustomValidity(`Максимальная цена - ${ MAX_PRICE_LENGTH }`);
     } else if (value < Number(objectTypePrice[typeNoticeInput.value])) {
-      roomNoticeInput.setCustomValidity(`Минимальная цена - ${ Number(objectTypePrice[typeNoticeInput.value]) }`);
+      priceNoticeInput.setCustomValidity(`Минимальная цена - ${ Number(objectTypePrice[typeNoticeInput.value]) }`);
     } else {
-      roomNoticeInput.setCustomValidity('');
+      priceNoticeInput.setCustomValidity('');
     }
 
-    roomNoticeInput.reportValidity();
+    priceNoticeInput.reportValidity();
   }
 });
