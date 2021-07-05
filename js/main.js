@@ -1,8 +1,9 @@
 import {getArrayObjects} from './data.js';
 import {generateNotice} from './generate-element.js';
-import './validate-form.js';
+import {validateForm} from './form.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
+validateForm();
 
 const arrayNotices = getArrayObjects();
 
