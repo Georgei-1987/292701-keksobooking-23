@@ -4,8 +4,8 @@ import {deactivateForm, activateForm, validateForm} from './form.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
 
-deactivateForm();
-setTimeout(activateForm, 2000);
+// deactivateForm();
+// setTimeout(activateForm, 2000);
 validateForm();
 
 const arrayNotices = getArrayObjects();
