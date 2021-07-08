@@ -1,3 +1,23 @@
+const formNotice = document.querySelector('.ad-form');
+const fieldset = formNotice.getElementsByTagName('fieldset');
+const mapFilters = document.querySelector('.map__filters');
+
+const deactivateForm = () => {
+  formNotice.classList.add('ad-form--disabled');
+  mapFilters.classList.add('map__filters--disabled');
+  for (const elem of fieldset) {
+    elem.setAttribute('disabled', '');
+  }
+};
+
+const activateForm = () => {
+  formNotice.classList.remove('ad-form--disabled');
+  mapFilters.classList.remove('map__filters--disabled');
+  for (const elem of fieldset) {
+    elem.removeAttribute('disabled');
+  }
+};
+
 const validateForm = () => {
   const MAX_PRICE_LENGTH = 1000000;
   const MIN_TITLE_LENGTH = 30;
@@ -91,4 +111,4 @@ const validateForm = () => {
   });
 };
 
-export {validateForm};
+export {deactivateForm, activateForm, validateForm};
