@@ -33,8 +33,64 @@ const validateForm = () => {
   const capacityNoticeInput = document.querySelector('#capacity');
   const priceNoticeInput = document.querySelector('#price');
   const roomNoticeInput = document.querySelector('#room_number');
+  const timeInNoticeSelect = document.querySelector('#timein');
+  const timeOutNoticeSelect = document.querySelector('#timeout');
+  const collectionTimeIn = timeInNoticeSelect.options;
+  const collectionTimeOut = timeOutNoticeSelect.options;
   const typeNoticeInput = document.querySelector('#type');
   const titleNoticeInput = document.querySelector('#title');
+
+  timeInNoticeSelect.addEventListener('input', (evt) => {
+    for (const elem of collectionTimeIn) {
+      elem.removeAttribute('selected');
+    }
+    for (const elem of collectionTimeOut) {
+      elem.removeAttribute('selected');
+    }
+    switch (evt.target.value) {
+      case '12:00':
+        collectionTimeOut[0].selected = 'true';
+        collectionTimeOut[0].setAttribute('selected','');
+        collectionTimeIn[0].setAttribute('selected','');
+        break;
+      case '13:00':
+        collectionTimeOut[1].selected = 'true';
+        collectionTimeOut[1].setAttribute('selected','');
+        collectionTimeIn[1].setAttribute('selected','');
+        break;
+      case '14:00':
+        collectionTimeOut[2].selected = 'true';
+        collectionTimeOut[2].setAttribute('selected','');
+        collectionTimeIn[2].setAttribute('selected','');
+        break;
+    }
+  });
+
+  timeOutNoticeSelect.addEventListener('input', (evt) => {
+    for (const elem of collectionTimeIn) {
+      elem.removeAttribute('selected');
+    }
+    for (const elem of collectionTimeOut) {
+      elem.removeAttribute('selected');
+    }
+    switch (evt.target.value) {
+      case '12:00':
+        collectionTimeIn[0].selected = 'true';
+        collectionTimeOut[0].setAttribute('selected','');
+        collectionTimeIn[0].setAttribute('selected','');
+        break;
+      case '13:00':
+        collectionTimeIn[1].selected = 'true';
+        collectionTimeOut[1].setAttribute('selected','');
+        collectionTimeIn[1].setAttribute('selected','');
+        break;
+      case '14:00':
+        collectionTimeIn[2].selected = 'true';
+        collectionTimeOut[2].setAttribute('selected','');
+        collectionTimeIn[2].setAttribute('selected','');
+        break;
+    }
+  });
 
   priceNoticeInput.addEventListener('input', () => {
     const value = priceNoticeInput.value;
