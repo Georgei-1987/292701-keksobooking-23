@@ -1,8 +1,7 @@
 import {address} from './form.js';
-import {getArrayObjects} from './data.js';
 import {generateNotice} from './generate-element.js';
+import {getArrayObjects} from './data.js';
 
-const arrayNotices = getArrayObjects();
 const map = L.map('map-canvas');
 
 const initMap = (func) => {
@@ -73,6 +72,7 @@ const createMarker = (notice) => {
 };
 
 const renderMarkers = () => {
+  const arrayNotices = getArrayObjects();
   arrayNotices.forEach((notice) => {
     createMarker(notice);
   });
