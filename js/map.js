@@ -45,34 +45,37 @@ const createMainMarker = () => {
   });
 };
 
-const createMarkers = () => {
-  arrayNotices.forEach((notice) => {
+const createMarker = (notice) => {
+  const markerIcon = L.icon(
+    {
+      iconUrl: 'img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    },
+  );
+  const marker = L.marker(
+    {
+      lat: notice.location.lat,
+      lng: notice.location.lng,
+    },
+    {
+      icon: markerIcon,
+    },
+  );
+  marker
+    .addTo(map)
+    .bindPopup(
+      generateNotice(notice),
+      {
+        keepInView: true,
+      },
+    );
+};
 
-    const markerIcon = L.icon(
-      {
-        iconUrl: 'img/pin.svg',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-      },
-    );
-    const marker = L.marker(
-      {
-        lat: notice.location.lat,
-        lng: notice.location.lng,
-      },
-      {
-        icon: markerIcon,
-      },
-    );
-    marker
-      .addTo(map)
-      .bindPopup(
-        generateNotice(notice),
-        {
-          keepInView: true,
-        },
-      );
+const renderMarkers = () => {
+  arrayNotices.forEach((notice) => {
+    createMarker(notice);
   });
 };
 
-export {initMap, createMainMarker, createMarkers};
+export {initMap, createMainMarker, renderMarkers};
