@@ -1,6 +1,5 @@
 import './data.js';
 
-const noticeTemplate = document.querySelector('#card').content;
 const objectType = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -22,7 +21,7 @@ const addPropertyAddress = (element, property) => {
 };
 
 const addPropertyPrice = (element, property) => {
-  element.querySelector('.popup__text--price').textContent = `${property} руб/ночь`;
+  element.querySelector('.popup__text--price').textContent = `${property} RUB/ночь`;
 
   return element;
 };
@@ -120,6 +119,7 @@ const addPropertyAvatar = (element, property) => {
 };
 
 const generateNotice = (notice) => {
+  const noticeTemplate = document.querySelector('#card').content;
   const noticeElement = noticeTemplate.cloneNode(true);
 
   addPropertyTitle (noticeElement, notice.offer.title);

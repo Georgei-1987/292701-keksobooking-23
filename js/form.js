@@ -1,5 +1,10 @@
 const formNotice = document.querySelector('.ad-form');
 const fieldset = formNotice.getElementsByTagName('fieldset');
+const address = formNotice.querySelector('#address');
+const COORDINATES_TOKYO = {
+  lat: 35.68949,
+  lng: 139.69171,
+};
 const mapFilters = document.querySelector('.map__filters');
 
 const deactivateForm = () => {
@@ -8,6 +13,7 @@ const deactivateForm = () => {
   for (const elem of fieldset) {
     elem.setAttribute('disabled', '');
   }
+  address.value = `${COORDINATES_TOKYO.lat}, ${COORDINATES_TOKYO.lng}`;
 };
 
 const activateForm = () => {
@@ -110,7 +116,6 @@ const validateForm = () => {
     const collectionCapacity = capacityNoticeInput.children;
     for (const element of collectionCapacity) {
       element.removeAttribute('disabled');
-      // element.focus();
     }
 
     switch (evt.target.value) {
@@ -167,4 +172,4 @@ const validateForm = () => {
   });
 };
 
-export {deactivateForm, activateForm, validateForm};
+export {deactivateForm, activateForm, validateForm, address};
