@@ -1,8 +1,8 @@
 import {deactivateForm, activateForm, validateForm} from './form.js';
-import {initMap, createMainMarker, renderMarkers} from './map.js';
+import {onLoad, createMainMarker, renderMarkers} from './map.js';
 
 deactivateForm();
-initMap(activateForm);
+onLoad(activateForm);
 createMainMarker();
 renderMarkers();
 validateForm();

@@ -1,10 +1,8 @@
+import {LAT_TOKYO, LNG_TOKYO} from './map.js';
+
 const formNotice = document.querySelector('.ad-form');
 const fieldset = formNotice.getElementsByTagName('fieldset');
 const address = formNotice.querySelector('#address');
-const COORDINATES_TOKYO = {
-  lat: 35.68949,
-  lng: 139.69171,
-};
 const mapFilters = document.querySelector('.map__filters');
 
 const deactivateForm = () => {
@@ -13,7 +11,7 @@ const deactivateForm = () => {
   for (const elem of fieldset) {
     elem.setAttribute('disabled', '');
   }
-  address.value = `${COORDINATES_TOKYO.lat}, ${COORDINATES_TOKYO.lng}`;
+  address.value = `${LAT_TOKYO}, ${LNG_TOKYO}`;
 };
 
 const activateForm = () => {
