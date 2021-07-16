@@ -101,4 +101,4 @@ const getObject = () => {
 
 const getArrayObjects = () => new Array(ARRAY_LENGTH).fill().map(getObject);
 
-export {getArrayObjects};
+export {getArrayObjects, ROUNDING_FOR_LOCATION};

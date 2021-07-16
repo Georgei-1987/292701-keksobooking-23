@@ -1,5 +1,8 @@
+import {LAT_TOKYO, LNG_TOKYO} from './map.js';
+
 const formNotice = document.querySelector('.ad-form');
 const fieldset = formNotice.getElementsByTagName('fieldset');
+const address = formNotice.querySelector('#address');
 const mapFilters = document.querySelector('.map__filters');
 
 const deactivateForm = () => {
@@ -8,6 +11,7 @@ const deactivateForm = () => {
   for (const elem of fieldset) {
     elem.setAttribute('disabled', '');
   }
+  address.value = `${LAT_TOKYO}, ${LNG_TOKYO}`;
 };
 
 const activateForm = () => {
@@ -110,7 +114,6 @@ const validateForm = () => {
     const collectionCapacity = capacityNoticeInput.children;
     for (const element of collectionCapacity) {
       element.removeAttribute('disabled');
-      // element.focus();
     }
 
     switch (evt.target.value) {
@@ -167,4 +170,4 @@ const validateForm = () => {
   });
 };
 
-export {deactivateForm, activateForm, validateForm};
+export {deactivateForm, activateForm, validateForm, address};
