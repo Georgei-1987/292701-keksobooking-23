@@ -1,4 +1,4 @@
-import './data.js';
+// import './data.js';
 
 const objectType = {
   flat: 'Квартира',
@@ -9,37 +9,67 @@ const objectType = {
 };
 
 const addPropertyTitle = (element, property) => {
-  element.querySelector('.popup__title').textContent = property;
+  const title = element.querySelector('.popup__title');
+  if (property) {
+    title.textContent = property;
+  } else {
+    title.style.display = 'none';
+  }
 
   return element;
 };
 
 const addPropertyAddress = (element, property) => {
-  element.querySelector('.popup__text--address').textContent = property;
+  const address = element.querySelector('.popup__text--address');
+  if (property) {
+    address.textContent = property;
+  } else {
+    address.style.display = 'none';
+  }
 
   return element;
 };
 
 const addPropertyPrice = (element, property) => {
-  element.querySelector('.popup__text--price').textContent = `${property} RUB/ночь`;
+  const price = element.querySelector('.popup__text--price');
+  if (property) {
+    price.textContent = `${property} RUB/ночь`;
+  } else {
+    price.style.display = 'none';
+  }
 
   return element;
 };
 
 const addPropertyType = (element, property) => {
-  element.querySelector('.popup__type').textContent = objectType[property];
+  const type = element.querySelector('.popup__type');
+  if (property) {
+    type.textContent = objectType[property];
+  } else {
+    type.style.display = 'none';
+  }
 
   return element;
 };
 
 const addPropertyCapacity = (element, firstProperty, secondProperty) => {
-  element.querySelector('.popup__text--capacity').textContent = `${firstProperty} комнаты для ${secondProperty} гостей`;
+  const capacity = element.querySelector('.popup__text--capacity');
+  if (firstProperty && secondProperty) {
+    capacity.textContent = `${firstProperty} комнаты для ${secondProperty} гостей`;
+  } else {
+    capacity.style.display = 'none';
+  }
 
   return element;
 };
 
 const addPropertyTime = (element, firstProperty, secondProperty) => {
-  element.querySelector('.popup__text--time').textContent = `Заезд после ${firstProperty}, выезд до ${secondProperty}`;
+  const time = element.querySelector('.popup__text--time');
+  if (firstProperty && secondProperty) {
+    time.textContent = `Заезд после ${firstProperty}, выезд до ${secondProperty}`;
+  } else {
+    time.style.display = 'none';
+  }
 
   return element;
 };
@@ -53,46 +83,53 @@ const addPropertyFeature = (element, property) => {
   const featureWasher = element.querySelector('.popup__feature--washer');
   const featureElevator = element.querySelector('.popup__feature--elevator');
   const featureConditioner = element.querySelector('.popup__feature--conditioner');
-
-  for (const elem of featuresElements) {
-    elem.style.display = 'none';
-  }
-
-  const featuresArray = property;
-  for (const feature of featuresArray) {
-    switch (feature) {
-      case 'wifi':
-        featureWifi.style.display = '';
-        featuresList.appendChild(featureWifi);
-        break;
-      case 'dishwasher':
-        featureDishwasher.style.display = '';
-        featuresList.appendChild(featureDishwasher);
-        break;
-      case 'parking':
-        featureParking.style.display = '';
-        featuresList.appendChild(featureParking);
-        break;
-      case 'washer':
-        featureWasher.style.display = '';
-        featuresList.appendChild(featureWasher);
-        break;
-      case 'elevator':
-        featureElevator.style.display = '';
-        featuresList.appendChild(featureElevator);
-        break;
-      case 'conditioner':
-        featureConditioner.style.display = '';
-        featuresList.appendChild(featureConditioner);
-        break;
+  if (property) {
+    for (const elem of featuresElements) {
+      elem.style.display = 'none';
     }
+
+    for (const feature of property) {
+      switch (feature) {
+        case 'wifi':
+          featureWifi.style.display = '';
+          featuresList.appendChild(featureWifi);
+          break;
+        case 'dishwasher':
+          featureDishwasher.style.display = '';
+          featuresList.appendChild(featureDishwasher);
+          break;
+        case 'parking':
+          featureParking.style.display = '';
+          featuresList.appendChild(featureParking);
+          break;
+        case 'washer':
+          featureWasher.style.display = '';
+          featuresList.appendChild(featureWasher);
+          break;
+        case 'elevator':
+          featureElevator.style.display = '';
+          featuresList.appendChild(featureElevator);
+          break;
+        case 'conditioner':
+          featureConditioner.style.display = '';
+          featuresList.appendChild(featureConditioner);
+          break;
+      }
+    }
+  } else {
+    featuresList.style.display = 'none';
   }
 
   return element;
 };
 
 const addPropertyDescription = (element, property) => {
-  element.querySelector('.popup__description').textContent = property;
+  const description = element.querySelector('.popup__description');
+  if (property) {
+    description.textContent = property;
+  } else {
+    description.style.display = 'none';
+  }
 
   return element;
 };
@@ -101,19 +138,27 @@ const addPropertyPhoto = (element, property) => {
   const popupPhotos = element.querySelector('.popup__photos');
   const popupPhoto = element.querySelector('.popup__photo');
   popupPhoto.style.display = 'none';
-  const arraySources = property;
-  for (const src of arraySources) {
-    const elem = popupPhoto.cloneNode(true);
-    elem.src = src;
-    elem.style.display = '';
-    popupPhotos.appendChild(elem);
+  if (property) {
+    for (const src of property) {
+      const elem = popupPhoto.cloneNode(true);
+      elem.src = src;
+      elem.style.display = '';
+      popupPhotos.appendChild(elem);
+    }
+  } else {
+    popupPhotos.style.display = 'none';
   }
 
   return element;
 };
 
 const addPropertyAvatar = (element, property) => {
-  element.querySelector('.popup__avatar').src = property;
+  const avatar = element.querySelector('.popup__avatar');
+  if (property) {
+    avatar.src = property;
+  } else {
+    avatar.style.display = 'none';
+  }
 
   return element;
 };

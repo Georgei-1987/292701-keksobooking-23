@@ -1,16 +1,17 @@
 import {address} from './form.js';
 import {generateNotice} from './generate-element.js';
-import {getArrayObjects, ROUNDING_FOR_LOCATION} from './data.js';
+// import {getArrayObjects} from './data.js';
 
 const LAT_TOKYO = 35.68949;
 const LNG_TOKYO = 139.69171;
 const HEIGHT_MAIN_PIN = 52;
 const HEIGHT_SIMILAR_PIN = 40;
+const ROUNDING_FOR_LOCATION = 5;
 const WIDTH_MAIN_PIN = 52;
 const WIDTH_SIMILAR_PIN = 40;
 const ZOOM_MAP = 12;
 
-const arrayNotices = getArrayObjects();
+// const arrayNotices = getArrayObjects();
 const map = L.map('map-canvas');
 
 const onLoad = (func) => {
@@ -80,10 +81,17 @@ const createMarker = (notice) => {
     );
 };
 
-const renderMarkers = () => {
-  arrayNotices.forEach((notice) => {
+const renderMarkers = (notices) => {
+  notices.forEach((notice) => {
     createMarker(notice);
   });
 };
 
-export {onLoad, createMainMarker, renderMarkers, LAT_TOKYO, LNG_TOKYO};
+const setDefaultMap = () => {
+  map.setView({
+    lat: LAT_TOKYO,
+    lng: LNG_TOKYO,
+  }, ZOOM_MAP);
+};
+
+export {onLoad, createMainMarker, renderMarkers, setDefaultMap, LAT_TOKYO, LNG_TOKYO};

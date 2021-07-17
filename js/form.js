@@ -1,4 +1,5 @@
-import {LAT_TOKYO, LNG_TOKYO} from './map.js';
+import {sendData, showAlert} from './api.js';
+import {setDefaultMap, LAT_TOKYO, LNG_TOKYO} from './map.js';
 
 const formNotice = document.querySelector('.ad-form');
 const fieldset = formNotice.getElementsByTagName('fieldset');
@@ -24,7 +25,7 @@ const activateForm = () => {
 
 const validateForm = () => {
   const MAX_PRICE_LENGTH = 1000000;
-  const MIN_TITLE_LENGTH = 30;
+  const MIN_TITLE_LENGTH = 3;
   const MAX_TITLE_LENGTH = 100;
   const objectTypePrice = {
     bungalow: '0',
@@ -170,4 +171,20 @@ const validateForm = () => {
   });
 };
 
-export {deactivateForm, activateForm, validateForm, address};
+const setUserFormSubmit = (onSuccess) => {
+  formNotice.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(),
+      () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+      new FormData(evt.target),
+    );
+
+    setDefaultMap();
+
+  });
+};
+
+
+export {deactivateForm, activateForm, validateForm, setUserFormSubmit, address};

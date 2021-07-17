@@ -1,7 +1,7 @@
 import {getRandomPositiveInteger} from './utils/get-random-positive-integer.js';
 import {getRandomPositiveFloat} from './utils/get-random-positive-float.js';
 
-const ARRAY_LENGTH = 10;
+const SIMILAR_NOTICE_COUNT = 10;
 const AVATAR_NUMBER = 10;
 const CHECK_LENGTH = 3;
 const FEATURES_LENGTH = 6;
@@ -99,6 +99,6 @@ const getObject = () => {
   };
 };
 
-const getArrayObjects = () => new Array(ARRAY_LENGTH).fill().map(getObject);
+const getArrayObjects = () => new Array(SIMILAR_NOTICE_COUNT).fill().map(getObject);
 
-export {getArrayObjects, ROUNDING_FOR_LOCATION};
+export {getArrayObjects};
