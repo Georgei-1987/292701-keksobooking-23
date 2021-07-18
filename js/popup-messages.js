@@ -17,16 +17,28 @@ const showSuccessMessage = () => {
 const showErrorMessage = () => {
   const errorTemplate = document.querySelector('#error').content.querySelector('.error');
   const errorMessage = errorTemplate.cloneNode(true);
-  // const buttonResetErrorMessage = document.querySelector('#error').content.querySelector('.error__button');
+  const buttonResetErrorMessage = errorMessage.querySelector('.error__button');
   document.body.append(errorMessage);
 
-  document.addEventListener('click', () => {
+  const removeErrorMessage = () => {
     errorMessage.remove();
+  };
+
+  buttonResetErrorMessage.addEventListener('click', () => {
+    removeErrorMessage();
+    document.removeEventListener('click', removeErrorMessage);
+    document.removeEventListener('keydown', removeErrorMessage);
+  });
+
+  document.addEventListener('click', () => {
+    removeErrorMessage();
+    document.removeEventListener('keydown', removeErrorMessage);
   });
 
   document.addEventListener('keydown', (evt) => {
     if (evt.code === 'Escape') {
-      errorMessage.remove();
+      removeErrorMessage();
+      document.removeEventListener('click', removeErrorMessage);
     }
   });
 };
