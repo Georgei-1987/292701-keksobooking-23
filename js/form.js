@@ -1,10 +1,43 @@
-import {sendData, showAlert} from './api.js';
-import {setDefaultMap, LAT_TOKYO, LNG_TOKYO} from './map.js';
+import {sendData} from './api.js';
+import {ACCORDANCE_TYPE_PRICE, MAX_PRICE_LENGTH, MAX_TITLE_LENGTH, MIN_TITLE_LENGTH} from './constants.js';
+import {setDefaultAddress, setDefaultMainMarker, setDefaultMap} from './map.js';
+import {showSuccessMessage} from './popup-messages.js';
 
+const mapFilters = document.querySelector('.map__filters');
 const formNotice = document.querySelector('.ad-form');
 const fieldset = formNotice.getElementsByTagName('fieldset');
-const address = formNotice.querySelector('#address');
-const mapFilters = document.querySelector('.map__filters');
+const addressNoticeInput = formNotice.querySelector('#address');
+const capacityNoticeSelect = formNotice.querySelector('#capacity');
+const priceNoticeInput = formNotice.querySelector('#price');
+const roomNoticeSelect = formNotice.querySelector('#room_number');
+const timeInNoticeSelect = formNotice.querySelector('#timein');
+const timeOutNoticeSelect = formNotice.querySelector('#timeout');
+const typeNoticeInput = formNotice.querySelector('#type');
+const titleNoticeInput = formNotice.querySelector('#title');
+const buttonFormReset = formNotice.querySelector('.ad-form__reset');
+
+const setFormDefault = () => {
+  showSuccessMessage();
+  mapFilters.reset();
+  formNotice.reset();
+  setDefaultMainMarker();
+  setDefaultAddress();
+  setDefaultMap();
+  priceNoticeInput.value = '';
+  for (const opt of typeNoticeInput.options) {
+    if (opt.hasAttribute('selected')) {
+      typeNoticeInput.value = opt.value;
+      priceNoticeInput.setAttribute('placeholder', ACCORDANCE_TYPE_PRICE[opt.value]);
+    }
+  }
+  for (const opt of capacityNoticeSelect.options) {
+    if (opt.value === '1') {
+      capacityNoticeSelect.value = opt.value;
+    } else {
+      opt.setAttribute('disabled', 'true');
+    }
+  }
+};
 
 const deactivateForm = () => {
   formNotice.classList.add('ad-form--disabled');
@@ -12,7 +45,6 @@ const deactivateForm = () => {
   for (const elem of fieldset) {
     elem.setAttribute('disabled', '');
   }
-  address.value = `${LAT_TOKYO}, ${LNG_TOKYO}`;
 };
 
 const activateForm = () => {
@@ -21,80 +53,23 @@ const activateForm = () => {
   for (const elem of fieldset) {
     elem.removeAttribute('disabled');
   }
+
+  setDefaultAddress();
 };
 
 const validateForm = () => {
-  const MAX_PRICE_LENGTH = 1000000;
-  const MIN_TITLE_LENGTH = 3;
-  const MAX_TITLE_LENGTH = 100;
-  const objectTypePrice = {
-    bungalow: '0',
-    flat: '1000',
-    hotel: '3000',
-    house: '5000',
-    palace: '10000',
-  };
-
-  const capacityNoticeInput = document.querySelector('#capacity');
-  const priceNoticeInput = document.querySelector('#price');
-  const roomNoticeInput = document.querySelector('#room_number');
-  const timeInNoticeSelect = document.querySelector('#timein');
-  const timeOutNoticeSelect = document.querySelector('#timeout');
-  const collectionTimeIn = timeInNoticeSelect.options;
-  const collectionTimeOut = timeOutNoticeSelect.options;
-  const typeNoticeInput = document.querySelector('#type');
-  const titleNoticeInput = document.querySelector('#title');
+  if (!priceNoticeInput.value) {
+    priceNoticeInput.setCustomValidity('Введите пожалуйста цену');
+  }
 
   timeInNoticeSelect.addEventListener('input', (evt) => {
-    for (const elem of collectionTimeIn) {
-      elem.removeAttribute('selected');
-    }
-    for (const elem of collectionTimeOut) {
-      elem.removeAttribute('selected');
-    }
-    switch (evt.target.value) {
-      case '12:00':
-        collectionTimeOut[0].selected = 'true';
-        collectionTimeOut[0].setAttribute('selected','');
-        collectionTimeIn[0].setAttribute('selected','');
-        break;
-      case '13:00':
-        collectionTimeOut[1].selected = 'true';
-        collectionTimeOut[1].setAttribute('selected','');
-        collectionTimeIn[1].setAttribute('selected','');
-        break;
-      case '14:00':
-        collectionTimeOut[2].selected = 'true';
-        collectionTimeOut[2].setAttribute('selected','');
-        collectionTimeIn[2].setAttribute('selected','');
-        break;
-    }
+    timeInNoticeSelect.value = evt.target.value;
+    timeOutNoticeSelect.value = evt.target.value;
   });
 
   timeOutNoticeSelect.addEventListener('input', (evt) => {
-    for (const elem of collectionTimeIn) {
-      elem.removeAttribute('selected');
-    }
-    for (const elem of collectionTimeOut) {
-      elem.removeAttribute('selected');
-    }
-    switch (evt.target.value) {
-      case '12:00':
-        collectionTimeIn[0].selected = 'true';
-        collectionTimeOut[0].setAttribute('selected','');
-        collectionTimeIn[0].setAttribute('selected','');
-        break;
-      case '13:00':
-        collectionTimeIn[1].selected = 'true';
-        collectionTimeOut[1].setAttribute('selected','');
-        collectionTimeIn[1].setAttribute('selected','');
-        break;
-      case '14:00':
-        collectionTimeIn[2].selected = 'true';
-        collectionTimeOut[2].setAttribute('selected','');
-        collectionTimeIn[2].setAttribute('selected','');
-        break;
-    }
+    timeOutNoticeSelect.value = evt.target.value;
+    timeInNoticeSelect.value = evt.target.value;
   });
 
   priceNoticeInput.addEventListener('input', () => {
@@ -102,8 +77,8 @@ const validateForm = () => {
 
     if (value > MAX_PRICE_LENGTH) {
       priceNoticeInput.setCustomValidity(`Максимальная цена - ${ MAX_PRICE_LENGTH }`);
-    } else if (value < Number(objectTypePrice[typeNoticeInput.value])) {
-      priceNoticeInput.setCustomValidity(`Минимальная цена - ${ Number(objectTypePrice[typeNoticeInput.value]) }`);
+    } else if (value < Number(ACCORDANCE_TYPE_PRICE[typeNoticeInput.value])) {
+      priceNoticeInput.setCustomValidity(`Минимальная цена - ${ Number(ACCORDANCE_TYPE_PRICE[typeNoticeInput.value]) }`);
     } else {
       priceNoticeInput.setCustomValidity('');
     }
@@ -111,8 +86,8 @@ const validateForm = () => {
     priceNoticeInput.reportValidity();
   });
 
-  roomNoticeInput.addEventListener('input', (evt) => {
-    const collectionCapacity = capacityNoticeInput.children;
+  roomNoticeSelect.addEventListener('input', (evt) => {
+    const collectionCapacity = capacityNoticeSelect.children;
     for (const element of collectionCapacity) {
       element.removeAttribute('disabled');
     }
@@ -153,15 +128,15 @@ const validateForm = () => {
   });
 
   typeNoticeInput.addEventListener('input', (evt) => {
-    priceNoticeInput.setAttribute('placeholder', objectTypePrice[evt.target.value]);
+    priceNoticeInput.setAttribute('placeholder', ACCORDANCE_TYPE_PRICE[evt.target.value]);
 
     if (priceNoticeInput.value) {
       const value = priceNoticeInput.value;
 
       if (value > MAX_PRICE_LENGTH) {
         priceNoticeInput.setCustomValidity(`Максимальная цена - ${ MAX_PRICE_LENGTH }`);
-      } else if (value < Number(objectTypePrice[typeNoticeInput.value])) {
-        priceNoticeInput.setCustomValidity(`Минимальная цена - ${ Number(objectTypePrice[typeNoticeInput.value]) }`);
+      } else if (value < Number(ACCORDANCE_TYPE_PRICE[typeNoticeInput.value])) {
+        priceNoticeInput.setCustomValidity(`Минимальная цена - ${ Number(ACCORDANCE_TYPE_PRICE[typeNoticeInput.value]) }`);
       } else {
         priceNoticeInput.setCustomValidity('');
       }
@@ -170,21 +145,19 @@ const validateForm = () => {
     }
   });
 };
-
 const setUserFormSubmit = (onSuccess) => {
   formNotice.addEventListener('submit', (evt) => {
     evt.preventDefault();
-
     sendData(
-      () => onSuccess(),
-      () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
       new FormData(evt.target),
+      () => onSuccess(),
     );
-
-    setDefaultMap();
-
   });
 };
 
+buttonFormReset.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  setFormDefault();
+});
 
-export {deactivateForm, activateForm, validateForm, setUserFormSubmit, address};
+export {deactivateForm, activateForm, setUserFormSubmit, setFormDefault, validateForm, addressNoticeInput};

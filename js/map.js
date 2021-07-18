@@ -1,20 +1,33 @@
-import {address} from './form.js';
-import {generateNotice} from './generate-element.js';
-// import {getArrayObjects} from './data.js';
+import {LAT_TOKYO, LNG_TOKYO, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, ROUNDING_FOR_LOCATION, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP} from './constants.js';
+import {addressNoticeInput} from './form.js';
+import {renderNotice} from './render-element.js';
 
-const LAT_TOKYO = 35.68949;
-const LNG_TOKYO = 139.69171;
-const HEIGHT_MAIN_PIN = 52;
-const HEIGHT_SIMILAR_PIN = 40;
-const ROUNDING_FOR_LOCATION = 5;
-const WIDTH_MAIN_PIN = 52;
-const WIDTH_SIMILAR_PIN = 40;
-const ZOOM_MAP = 12;
-
-// const arrayNotices = getArrayObjects();
 const map = L.map('map-canvas');
 
-const onLoad = (func) => {
+const mainPinIcon = L.icon(
+  {
+    iconUrl: 'img/main-pin.svg',
+    iconSize: [WIDTH_MAIN_PIN, HEIGHT_MAIN_PIN],
+    iconAnchor: [WIDTH_MAIN_PIN/2, HEIGHT_MAIN_PIN],
+  },
+);
+
+const mainPinMarker = L.marker(
+  {
+    lat: LAT_TOKYO,
+    lng: LNG_TOKYO,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+
+const onMapLoad = (func) => {
+  mainPinMarker.addTo(map);
+  mainPinMarker.on('moveend', (evt) => {
+    addressNoticeInput.value = `${evt.target.getLatLng().lat.toFixed(ROUNDING_FOR_LOCATION)}, ${evt.target.getLatLng().lng.toFixed(ROUNDING_FOR_LOCATION)}`;
+  });
   map.on('load', () => {
     func();
   });
@@ -28,30 +41,6 @@ const onLoad = (func) => {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
   ).addTo(map);
-};
-
-const createMainMarker = () => {
-  const mainPinIcon = L.icon(
-    {
-      iconUrl: 'img/main-pin.svg',
-      iconSize: [WIDTH_MAIN_PIN, HEIGHT_MAIN_PIN],
-      iconAnchor: [WIDTH_MAIN_PIN/2, HEIGHT_MAIN_PIN],
-    },
-  );
-  const mainPinMarker = L.marker(
-    {
-      lat: LAT_TOKYO,
-      lng: LNG_TOKYO,
-    },
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-  mainPinMarker.addTo(map);
-  mainPinMarker.on('moveend', (evt) => {
-    address.value = `${evt.target.getLatLng().lat.toFixed(ROUNDING_FOR_LOCATION)}, ${evt.target.getLatLng().lng.toFixed(ROUNDING_FOR_LOCATION)}`;
-  });
 };
 
 const createMarker = (notice) => {
@@ -74,7 +63,7 @@ const createMarker = (notice) => {
   marker
     .addTo(map)
     .bindPopup(
-      generateNotice(notice),
+      renderNotice(notice),
       {
         keepInView: true,
       },
@@ -87,6 +76,14 @@ const renderMarkers = (notices) => {
   });
 };
 
+const setDefaultAddress = () => {
+  addressNoticeInput.value = `${LAT_TOKYO}, ${LNG_TOKYO}`;
+};
+
+const setDefaultMainMarker = () => {
+  mainPinMarker.setLatLng([LAT_TOKYO, LNG_TOKYO]);
+};
+
 const setDefaultMap = () => {
   map.setView({
     lat: LAT_TOKYO,
@@ -94,4 +91,4 @@ const setDefaultMap = () => {
   }, ZOOM_MAP);
 };
 
-export {onLoad, createMainMarker, renderMarkers, setDefaultMap, LAT_TOKYO, LNG_TOKYO};
+export {onMapLoad, renderMarkers, setDefaultAddress, setDefaultMainMarker, setDefaultMap};

@@ -1,5 +1,3 @@
-// import './data.js';
-
 const objectType = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -163,8 +161,8 @@ const addPropertyAvatar = (element, property) => {
   return element;
 };
 
-const generateNotice = (notice) => {
-  const noticeTemplate = document.querySelector('#card').content;
+const renderNotice = (notice) => {
+  const noticeTemplate = document.querySelector('#card').content.querySelector('.popup');
   const noticeElement = noticeTemplate.cloneNode(true);
 
   addPropertyTitle (noticeElement, notice.offer.title);
@@ -181,4 +179,4 @@ const generateNotice = (notice) => {
   return noticeElement;
 };
 
-export {generateNotice};
+export {renderNotice};

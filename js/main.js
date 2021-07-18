@@ -1,18 +1,13 @@
-import {getData/*, showAlert, sendData*/} from './api.js';
-import {deactivateForm, activateForm, validateForm, setUserFormSubmit} from './form.js';
-// import {generateNotice} from './generate-element.js';
-import {onLoad, createMainMarker, /*createMarker,*/ renderMarkers} from './map.js';
-
-const SIMILAR_NOTICE_COUNT = 10;
+import {getData} from './api.js';
+import {SIMILAR_NOTICE_COUNT} from './constants.js';
+import {deactivateForm, activateForm, setUserFormSubmit, setFormDefault, validateForm} from './form.js';
+import {onMapLoad, renderMarkers} from './map.js';
 
 deactivateForm();
-onLoad(activateForm);
-createMainMarker();
-
-getData( (notices) => renderMarkers(notices.slice(0, SIMILAR_NOTICE_COUNT) ),
+onMapLoad(activateForm);
+getData( (notices) =>
+  renderMarkers(notices.slice(0, SIMILAR_NOTICE_COUNT) ),
 );
-
-
 validateForm();
+setUserFormSubmit(setFormDefault);
 
-setUserFormSubmit();

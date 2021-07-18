@@ -1,29 +1,8 @@
-const ALERT_SHOW_TIME = 2000;
-
-const showAlert = (message) => {
-  const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 100;
-  alertContainer.style.position = 'absolute';
-  alertContainer.style.left = 0;
-  alertContainer.style.top = 0;
-  alertContainer.style.right = 0;
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '30px';
-  alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'red';
-
-  alertContainer.textContent = message;
-
-  document.body.append(alertContainer);
-
-  setTimeout(() => {
-    alertContainer.remove();
-  }, ALERT_SHOW_TIME);
-};
-
+import {ADDRESS_FOR_GET_METHOD, ADDRESS_FOR_POST_METHOD} from './constants.js';
+import {showAlert, showErrorMessage} from './popup-messages.js';
 
 const getData = (onSuccess) => {
-  fetch('https://23.javascript.pages.academy/keksobooking/data')
+  fetch(ADDRESS_FOR_GET_METHOD)
     .then((response) => {
       if (response.ok) {
         return response;
@@ -35,12 +14,14 @@ const getData = (onSuccess) => {
     .then((notices) => {
       onSuccess(notices);
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      showAlert(error);
+    });
 };
 
-const sendData = (onSuccess, onFail, body) => {
+const sendData = (body, onSuccess) => {
   fetch(
-    'https://23.javascript.pages.academy/keksobooking/data',
+    ADDRESS_FOR_POST_METHOD,
     {
       method: 'POST',
       body,
@@ -50,13 +31,13 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+        showErrorMessage();
       }
     })
     .catch(() => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз');
+      showErrorMessage();
     });
 };
 
 
-export {getData, sendData, showAlert};
+export {getData, sendData};
