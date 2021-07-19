@@ -1,4 +1,4 @@
-import {LAT_TOKYO, LNG_TOKYO, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, ROUNDING_FOR_LOCATION, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP} from './constants.js';
+import {LAT_TOKYO, LNG_TOKYO, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, ROUNDING_FOR_LOCATION, SIMILAR_NOTICE_COUNT, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP} from './constants.js';
 import {addressNoticeInput} from './form.js';
 import {renderNotice} from './render-element.js';
 
@@ -43,6 +43,8 @@ const onMapLoad = (func) => {
   ).addTo(map);
 };
 
+const markerGroup = L.layerGroup().addTo(map);
+
 const createMarker = (notice) => {
   const markerIcon = L.icon(
     {
@@ -61,7 +63,7 @@ const createMarker = (notice) => {
     },
   );
   marker
-    .addTo(map)
+    .addTo(markerGroup)
     .bindPopup(
       renderNotice(notice),
       {
@@ -71,9 +73,12 @@ const createMarker = (notice) => {
 };
 
 const renderMarkers = (notices) => {
-  notices.forEach((notice) => {
-    createMarker(notice);
-  });
+  notices
+    .slice(0, SIMILAR_NOTICE_COUNT)
+    .forEach((notice) => {
+      createMarker(notice);
+    });
+
 };
 
 const setDefaultAddress = () => {
@@ -91,4 +96,4 @@ const setDefaultMap = () => {
   }, ZOOM_MAP);
 };
 
-export {onMapLoad, renderMarkers, setDefaultAddress, setDefaultMainMarker, setDefaultMap};
+export {onMapLoad, renderMarkers, setDefaultAddress, setDefaultMainMarker, setDefaultMap, markerGroup};

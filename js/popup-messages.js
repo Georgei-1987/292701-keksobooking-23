@@ -5,20 +5,20 @@ const showSuccessMessage = () => {
   const successMessage = successTemplate.cloneNode(true);
   document.body.append(successMessage);
 
-  const removeSuccessMessage = () => {
+  const closeSuccessMessage = () => {
     successMessage.remove();
-    document.removeEventListener('click', removeSuccessMessage);
-    document.removeEventListener('keydown', removeSuccessMessage);
+    document.removeEventListener('click', closeSuccessMessage);
   };
 
-  document.addEventListener('click', () => {
-    removeSuccessMessage();
-  });
-  document.addEventListener('keydown', (evt) => {
+  const closeSuccessMessageKeydownListener = (evt) => {
     if (evt.code === 'Escape') {
-      removeSuccessMessage();
+      closeSuccessMessage();
+      document.removeEventListener('keydown', closeSuccessMessageKeydownListener);
     }
-  });
+  };
+
+  document.addEventListener('click', closeSuccessMessage);
+  document.addEventListener('keydown', closeSuccessMessageKeydownListener);
 };
 
 const showErrorMessage = () => {
@@ -27,22 +27,22 @@ const showErrorMessage = () => {
   const buttonResetErrorMessage = errorMessage.querySelector('.error__button');
   document.body.append(errorMessage);
 
-  const removeErrorMessage = () => {
+  const closeErrorMessage = () => {
     errorMessage.remove();
-    document.removeEventListener('click', removeErrorMessage);
-    buttonResetErrorMessage.removeEventListener('click', removeErrorMessage);
-    document.removeEventListener('keydown', removeErrorMessage);
+    document.removeEventListener('click', closeErrorMessage);
+    buttonResetErrorMessage.removeEventListener('click', closeErrorMessage);
   };
 
-  document.addEventListener('click', removeErrorMessage);
-
-  buttonResetErrorMessage.addEventListener('click', removeErrorMessage);
-
-  document.addEventListener('keydown', (evt) => {
+  const closeErrorMessageKeydownListener = (evt) => {
     if (evt.code === 'Escape') {
-      removeErrorMessage();
+      closeErrorMessage();
+      document.removeEventListener('keydown', closeErrorMessageKeydownListener);
     }
-  });
+  };
+
+  document.addEventListener('click', closeErrorMessage);
+  buttonResetErrorMessage.addEventListener('click', closeErrorMessage);
+  document.addEventListener('keydown', closeErrorMessageKeydownListener);
 };
 
 const showAlert = (message) => {
