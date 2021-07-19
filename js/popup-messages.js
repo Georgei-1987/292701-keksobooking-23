@@ -4,12 +4,19 @@ const showSuccessMessage = () => {
   const successTemplate = document.querySelector('#success').content.querySelector('.success');
   const successMessage = successTemplate.cloneNode(true);
   document.body.append(successMessage);
-  document.addEventListener('click', () => {
+
+  const removeSuccessMessage = () => {
     successMessage.remove();
+    document.removeEventListener('click', removeSuccessMessage);
+    document.removeEventListener('keydown', removeSuccessMessage);
+  };
+
+  document.addEventListener('click', () => {
+    removeSuccessMessage();
   });
   document.addEventListener('keydown', (evt) => {
     if (evt.code === 'Escape') {
-      successMessage.remove();
+      removeSuccessMessage();
     }
   });
 };
@@ -22,23 +29,18 @@ const showErrorMessage = () => {
 
   const removeErrorMessage = () => {
     errorMessage.remove();
+    document.removeEventListener('click', removeErrorMessage);
+    buttonResetErrorMessage.removeEventListener('click', removeErrorMessage);
+    document.removeEventListener('keydown', removeErrorMessage);
   };
 
-  buttonResetErrorMessage.addEventListener('click', () => {
-    removeErrorMessage();
-    document.removeEventListener('click', removeErrorMessage);
-    document.removeEventListener('keydown', removeErrorMessage);
-  });
+  document.addEventListener('click', removeErrorMessage);
 
-  document.addEventListener('click', () => {
-    removeErrorMessage();
-    document.removeEventListener('keydown', removeErrorMessage);
-  });
+  buttonResetErrorMessage.addEventListener('click', removeErrorMessage);
 
   document.addEventListener('keydown', (evt) => {
     if (evt.code === 'Escape') {
       removeErrorMessage();
-      document.removeEventListener('click', removeErrorMessage);
     }
   });
 };

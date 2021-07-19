@@ -1,5 +1,5 @@
 import {ADDRESS_FOR_GET_METHOD, ADDRESS_FOR_POST_METHOD} from './constants.js';
-import {showAlert, showErrorMessage} from './popup-messages.js';
+import {showErrorMessage} from './popup-messages.js';
 
 const getData = (onSuccess) => {
   fetch(ADDRESS_FOR_GET_METHOD)
