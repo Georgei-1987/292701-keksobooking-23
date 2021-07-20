@@ -1,5 +1,6 @@
 import {LAT_TOKYO, LNG_TOKYO, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, ROUNDING_FOR_LOCATION, SIMILAR_NOTICE_COUNT, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP} from './constants.js';
 import {addressNoticeInput} from './form.js';
+import {compareNotices} from './map-filters.js';
 import {renderNotice} from './render-element.js';
 
 const map = L.map('map-canvas');
@@ -74,11 +75,12 @@ const createMarker = (notice) => {
 
 const renderMarkers = (notices) => {
   notices
+    .slice()
+    .sort(compareNotices)
     .slice(0, SIMILAR_NOTICE_COUNT)
     .forEach((notice) => {
       createMarker(notice);
     });
-
 };
 
 const setDefaultAddress = () => {
