@@ -1,8 +1,11 @@
-import {deactivateForm, activateForm, validateForm} from './form.js';
-import {onLoad, createMainMarker, renderMarkers} from './map.js';
+import {getData} from './api.js';
+import {deactivateForm, activateForm, setUserFormSubmit, setFormDefault, validateForm} from './form.js';
+import {onMapLoad, renderMarkers} from './map.js';
 
 deactivateForm();
-onLoad(activateForm);
-createMainMarker();
-renderMarkers();
+onMapLoad(activateForm);
+getData( (notices) => {
+  renderMarkers(notices);
+});
 validateForm();
+setUserFormSubmit(setFormDefault);
