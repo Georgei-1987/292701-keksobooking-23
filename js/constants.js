@@ -1,17 +1,3 @@
-const accordanceTypePrice = {
-  bungalow: '0',
-  flat: '1000',
-  hotel: '3000',
-  house: '5000',
-  palace: '10000',
-};
-const objectType = {
-  flat: 'Квартира',
-  bungalow: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец',
-  hotel: 'Отель',
-};
 const ADDRESS_FOR_GET_METHOD = 'https://23.javascript.pages.academy/keksobooking/data';
 const ADDRESS_FOR_POST_METHOD = 'https://23.javascript.pages.academy/keksobooking';
 const ALERT_SHOW_TIME = 5000;
@@ -31,4 +17,4 @@ const WIDTH_MAIN_PIN = 52;
 const WIDTH_SIMILAR_PIN = 40;
 const ZOOM_MAP = 12;
 
-export {accordanceTypePrice, ADDRESS_FOR_GET_METHOD, ADDRESS_FOR_POST_METHOD, ALERT_SHOW_TIME, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, MAX_PRICE_RANGE, MAX_PRICE_VALUE, MIN_PRICE_RANGE, MAX_TITLE_LENGTH, MIN_TITLE_LENGTH, LAT_TOKYO, LNG_TOKYO, objectType, RERENDER_DELAY, ROUNDING_FOR_LOCATION, SIMILAR_NOTICE_COUNT, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP};
+export {ADDRESS_FOR_GET_METHOD, ADDRESS_FOR_POST_METHOD, ALERT_SHOW_TIME, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, MAX_PRICE_RANGE, MAX_PRICE_VALUE, MIN_PRICE_RANGE, MAX_TITLE_LENGTH, MIN_TITLE_LENGTH, LAT_TOKYO, LNG_TOKYO, RERENDER_DELAY, ROUNDING_FOR_LOCATION, SIMILAR_NOTICE_COUNT, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP};

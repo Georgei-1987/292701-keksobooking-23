@@ -1,4 +1,10 @@
-import {objectType} from './constants.js';
+const objectType = {
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель',
+};
 
 const addPropertyTitle = (element, property) => {
   const title = element.querySelector('.popup__title');
