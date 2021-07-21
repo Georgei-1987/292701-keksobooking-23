@@ -1,40 +1,51 @@
 import {ALERT_SHOW_TIME} from './constants.js';
 
 const showSuccessMessage = () => {
-  const successTemplate = document.querySelector('#success').content.querySelector('.success');
+  const successTemplate = document
+    .querySelector('#success')
+    .content
+    .querySelector('.success');
   const successMessage = successTemplate.cloneNode(true);
   document.body.append(successMessage);
 
-  const closeSuccessMessage = (evt) => {
-    if (evt.type === 'click' || evt.key === 'Escape') {
+  const closeOnEscHandler = (evt) => {
+    if (evt.key === 'Escape') {
       successMessage.remove();
-      document.removeEventListener('click', closeSuccessMessage);
-      document.removeEventListener('keydown', closeSuccessMessage);
+      document.removeEventListener('keydown', closeOnEscHandler);
     }
   };
 
-  document.addEventListener('click', closeSuccessMessage);
-  document.addEventListener('keydown', closeSuccessMessage);
+  const closeClickMessageHandler = () => {
+    successMessage.remove();
+    document.removeEventListener('keydown', closeOnEscHandler);
+  };
+
+  successMessage.addEventListener('click', closeClickMessageHandler);
+  document.addEventListener('keydown', closeOnEscHandler);
 };
 
 const showErrorMessage = () => {
-  const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  const errorTemplate = document
+    .querySelector('#error')
+    .content
+    .querySelector('.error');
   const errorMessage = errorTemplate.cloneNode(true);
-  const buttonResetErrorMessage = errorMessage.querySelector('.error__button');
   document.body.append(errorMessage);
 
-  const closeErrorMessage = (evt) => {
-    if (evt.type === 'click' || evt.key === 'Escape' || evt.target.classList.value === 'error__button') {
+  const closeOnEscHandler = (evt) => {
+    if (evt.key === 'Escape') {
       errorMessage.remove();
-      document.removeEventListener('click', closeErrorMessage);
-      buttonResetErrorMessage.removeEventListener('click', closeErrorMessage);
-      document.removeEventListener('keydown', closeErrorMessage);
+      document.removeEventListener('keydown', closeOnEscHandler);
     }
   };
 
-  document.addEventListener('click', closeErrorMessage);
-  buttonResetErrorMessage.addEventListener('click', closeErrorMessage);
-  document.addEventListener('keydown', closeErrorMessage);
+  const closeClickMessageHandler = () => {
+    errorMessage.remove();
+    document.removeEventListener('keydown', closeOnEscHandler);
+  };
+
+  errorMessage.addEventListener('click', closeClickMessageHandler);
+  document.addEventListener('keydown', closeOnEscHandler);
 };
 
 const showAlert = (message) => {

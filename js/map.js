@@ -1,9 +1,9 @@
-import {LAT_TOKYO, LNG_TOKYO, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, ROUNDING_FOR_LOCATION, SIMILAR_NOTICE_COUNT, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP} from './constants.js';
+import {LAT_TOKYO, LNG_TOKYO, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, ROUNDING_FOR_LOCATION, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP} from './constants.js';
 import {addressNoticeInput} from './form.js';
-import {compareNotices} from './map-filters.js';
 import {renderNotice} from './render-element.js';
 
 const map = L.map('map-canvas');
+const markerGroup = L.layerGroup().addTo(map);
 
 const mainPinIcon = L.icon(
   {
@@ -24,18 +24,40 @@ const mainPinMarker = L.marker(
   },
 );
 
-const onMapLoad = (func) => {
-  mainPinMarker.addTo(map);
-  mainPinMarker.on('moveend', (evt) => {
-    addressNoticeInput.value = `${evt.target.getLatLng().lat.toFixed(ROUNDING_FOR_LOCATION)}, ${evt.target.getLatLng().lng.toFixed(ROUNDING_FOR_LOCATION)}`;
-  });
-  map.on('load', () => {
-    func();
-  });
+const clearMarkerGroup = () => {
+  markerGroup.clearLayers();
+};
+
+const setDefaultAddress = () => {
+  addressNoticeInput.value = `${LAT_TOKYO}, ${LNG_TOKYO}`;
+};
+
+const setDefaultMainMarker = () => {
+  mainPinMarker.setLatLng([LAT_TOKYO, LNG_TOKYO]);
+};
+
+const setDefaultMap = () => {
   map.setView({
     lat: LAT_TOKYO,
     lng: LNG_TOKYO,
   }, ZOOM_MAP);
+};
+
+const onMapLoad = (cb) => {
+  map.on('load', () => {
+    cb();
+  });
+
+  map.setView({
+    lat: LAT_TOKYO,
+    lng: LNG_TOKYO,
+  }, ZOOM_MAP);
+
+  mainPinMarker.addTo(map);
+  mainPinMarker.on('moveend', (evt) => {
+    addressNoticeInput.value = `${evt.target.getLatLng().lat.toFixed(ROUNDING_FOR_LOCATION)}, ${evt.target.getLatLng().lng.toFixed(ROUNDING_FOR_LOCATION)}`;
+  });
+
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
@@ -43,8 +65,6 @@ const onMapLoad = (func) => {
     },
   ).addTo(map);
 };
-
-const markerGroup = L.layerGroup().addTo(map);
 
 const createMarker = (notice) => {
   const markerIcon = L.icon(
@@ -75,27 +95,9 @@ const createMarker = (notice) => {
 
 const renderMarkers = (notices) => {
   notices
-    .slice()
-    .sort(compareNotices)
-    .slice(0, SIMILAR_NOTICE_COUNT)
     .forEach((notice) => {
       createMarker(notice);
     });
 };
 
-const setDefaultAddress = () => {
-  addressNoticeInput.value = `${LAT_TOKYO}, ${LNG_TOKYO}`;
-};
-
-const setDefaultMainMarker = () => {
-  mainPinMarker.setLatLng([LAT_TOKYO, LNG_TOKYO]);
-};
-
-const setDefaultMap = () => {
-  map.setView({
-    lat: LAT_TOKYO,
-    lng: LNG_TOKYO,
-  }, ZOOM_MAP);
-};
-
-export {onMapLoad, renderMarkers, setDefaultAddress, setDefaultMainMarker, setDefaultMap, markerGroup};
+export {clearMarkerGroup, onMapLoad, renderMarkers, setDefaultAddress, setDefaultMainMarker, setDefaultMap};
