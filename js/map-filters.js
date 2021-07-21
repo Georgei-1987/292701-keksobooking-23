@@ -1,4 +1,6 @@
-import {markerGroup} from './map.js';
+import {MIN_PRICE_RANGE, MAX_PRICE_RANGE, RERENDER_DELAY, SIMILAR_NOTICE_COUNT} from './constants.js';
+import {clearMarkerGroup, renderMarkers} from './map.js';
+import {debounce} from './utils/debounce.js';
 
 const mapFilters = document.querySelector('.map__filters');
 const typeFilter = mapFilters.querySelector('#housing-type');
@@ -12,95 +14,6 @@ const washerFilter = mapFilters.querySelector('#filter-washer');
 const elevatorFilter = mapFilters.querySelector('#filter-elevator');
 const conditionerFilter = mapFilters.querySelector('#filter-conditioner');
 
-const removeCallFunction = (cb) => {
-  markerGroup.clearLayers();
-  cb();
-};
-
-const setTypeClick = (cb) => {
-  typeFilter.addEventListener('input', () => {
-    removeCallFunction(cb);
-  });
-};
-
-const setPriceClick = (cb) => {
-  priceFilter.addEventListener('input', () => {
-    removeCallFunction(cb);
-  });
-};
-
-const setRoomsClick = (cb) => {
-  roomsFilter.addEventListener('input', () => {
-    removeCallFunction(cb);
-  });
-};
-
-const setGuestsClick = (cb) => {
-  guestsFilter.addEventListener('input', () => {
-    removeCallFunction(cb);
-  });
-};
-
-const setWifiClick = (cb) => {
-  wifiFilter.addEventListener('change', () => {
-    if (wifiFilter.checked) {
-      removeCallFunction(cb);
-    } else {
-      removeCallFunction(cb);
-    }
-  });
-};
-
-const setDishwasherClick = (cb) => {
-  dishwasherFilter.addEventListener('change', () => {
-    if (dishwasherFilter.checked) {
-      removeCallFunction(cb);
-    } else {
-      removeCallFunction(cb);
-    }
-  });
-};
-
-const setParkingClick = (cb) => {
-  parkingFilter.addEventListener('change', () => {
-    if (parkingFilter.checked) {
-      removeCallFunction(cb);
-    } else {
-      removeCallFunction(cb);
-    }
-  });
-};
-
-const setWasherClick = (cb) => {
-  washerFilter.addEventListener('change', () => {
-    if (washerFilter.checked) {
-      removeCallFunction(cb);
-    } else {
-      removeCallFunction(cb);
-    }
-  });
-};
-
-const setElevatorClick = (cb) => {
-  elevatorFilter.addEventListener('change', () => {
-    if (elevatorFilter.checked) {
-      removeCallFunction(cb);
-    } else {
-      removeCallFunction(cb);
-    }
-  });
-};
-
-const setConditionerClick = (cb) => {
-  conditionerFilter.addEventListener('change', () => {
-    if (conditionerFilter.checked) {
-      removeCallFunction(cb);
-    } else {
-      removeCallFunction(cb);
-    }
-  });
-};
-
 const getNoticeRank = (notice) => {
 
   let rank = 0;
@@ -108,27 +21,33 @@ const getNoticeRank = (notice) => {
   if (notice.offer.type === typeFilter.value) {
     rank++;
   }
+
   if (priceFilter.value === 'middle') {
-    if (notice.offer.price >= 10000 && notice.offer.price <= 50000) {
+    if (notice.offer.price >= MIN_PRICE_RANGE && notice.offer.price <= MAX_PRICE_RANGE) {
       rank++;
     }
   }
+
   if (priceFilter.value === 'low') {
-    if (notice.offer.price < 10000) {
+    if (notice.offer.price < MIN_PRICE_RANGE) {
       rank++;
     }
   }
+
   if (priceFilter.value === 'high') {
-    if (notice.offer.price > 50000) {
+    if (notice.offer.price > MAX_PRICE_RANGE) {
       rank++;
     }
   }
+
   if (notice.offer.rooms === Number(roomsFilter.value)) {
     rank++;
   }
+
   if (notice.offer.guests === Number(guestsFilter.value)) {
     rank++;
   }
+
   if (wifiFilter.checked && notice.offer.features) {
     for (const feature of notice.offer.features) {
       if (feature === wifiFilter.value) {
@@ -136,6 +55,7 @@ const getNoticeRank = (notice) => {
       }
     }
   }
+
   if (dishwasherFilter.checked && notice.offer.features) {
     for (const feature of notice.offer.features) {
       if (feature === dishwasherFilter.value) {
@@ -143,6 +63,7 @@ const getNoticeRank = (notice) => {
       }
     }
   }
+
   if (parkingFilter.checked && notice.offer.features) {
     for (const feature of notice.offer.features) {
       if (feature === parkingFilter.value) {
@@ -150,6 +71,7 @@ const getNoticeRank = (notice) => {
       }
     }
   }
+
   if (washerFilter.checked && notice.offer.features) {
     for (const feature of notice.offer.features) {
       if (feature === washerFilter.value) {
@@ -157,6 +79,7 @@ const getNoticeRank = (notice) => {
       }
     }
   }
+
   if (elevatorFilter.checked && notice.offer.features) {
     for (const feature of notice.offer.features) {
       if (feature === elevatorFilter.value) {
@@ -164,6 +87,7 @@ const getNoticeRank = (notice) => {
       }
     }
   }
+
   if (conditionerFilter.checked && notice.offer.features) {
     for (const feature of notice.offer.features) {
       if (feature === conditionerFilter.value) {
@@ -182,39 +106,26 @@ const compareNotices = (noticeA, noticeB) => {
   return rankB - rankA;
 };
 
-// const mapFilters = document.querySelector('.map__filters');
-// const roomsFilter = mapFilters.querySelector('#housing-rooms');
+const handleFiltersChange = (data) => debounce(() => {
+  clearMarkerGroup();
 
-// const setRoomsClick = (cb) => {
-//   roomsFilter.addEventListener('input', () => {
-//     markerGroup.clearLayers();
-//     cb();
-//     console.log(roomsFilter.value);
-//   });
-// };
+  renderMarkers(Array
+    .from(data)
+    .sort(compareNotices)
+    .slice(0, SIMILAR_NOTICE_COUNT));
+}, RERENDER_DELAY);
 
+const filtersHandler = (data) => {
+  mapFilters.addEventListener('reset', () => {
+    renderMarkers(Array
+      .from(data)
+      .slice(0, SIMILAR_NOTICE_COUNT));
+  });
 
-// setRoomsClick( () => renderMarkers(notices) );
+  renderMarkers(Array
+    .from(data)
+    .slice(0, SIMILAR_NOTICE_COUNT));
+  mapFilters.addEventListener('input', handleFiltersChange(data));
+};
 
-
-// const renderMarkers = (notices) => {
-//   notices
-//     .slice()
-//     .sort(compareNotices)
-//     .slice(0, SIMILAR_NOTICE_COUNT)
-//     .forEach((notice) => {
-//       createMarker(notice);
-//     });
-// };
-
-
-// const getNoticeRank = (notice) => {
-//   let rank = 0;
-
-//   if (notice.offer.rooms === roomsFilter.value) {
-//     rank += 1;
-//   }
-//   return rank;
-// };
-
-export {compareNotices, setTypeClick, setPriceClick, setRoomsClick, setGuestsClick, setWifiClick, setDishwasherClick, setParkingClick, setWasherClick, setElevatorClick, setConditionerClick};
+export {filtersHandler};

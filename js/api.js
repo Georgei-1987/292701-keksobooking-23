@@ -39,5 +39,4 @@ const sendData = (body, onSuccess) => {
     });
 };
 
-
 export {getData, sendData};

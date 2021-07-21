@@ -1,8 +1,15 @@
 import {sendData} from './api.js';
-import {ACCORDANCE_TYPE_PRICE, MAX_PRICE_LENGTH, MAX_TITLE_LENGTH, MIN_TITLE_LENGTH} from './constants.js';
-import {setDefaultAddress, setDefaultMainMarker, setDefaultMap} from './map.js';
+import {MAX_PRICE_VALUE, MAX_TITLE_LENGTH, MIN_TITLE_LENGTH} from './constants.js';
+import {setDefaultAddress, setDefaultMainMarker, setDefaultMap, clearMarkerGroup} from './map.js';
 import {showSuccessMessage} from './popup-messages.js';
 
+const accordanceTypePrice = {
+  bungalow: '0',
+  flat: '1000',
+  hotel: '3000',
+  house: '5000',
+  palace: '10000',
+};
 const mapFilters = document.querySelector('.map__filters');
 const formNotice = document.querySelector('.ad-form');
 const fieldset = formNotice.getElementsByTagName('fieldset');
@@ -14,20 +21,20 @@ const timeInNoticeSelect = formNotice.querySelector('#timein');
 const timeOutNoticeSelect = formNotice.querySelector('#timeout');
 const typeNoticeInput = formNotice.querySelector('#type');
 const titleNoticeInput = formNotice.querySelector('#title');
-const buttonFormReset = formNotice.querySelector('.ad-form__reset');
+const buttonFormReset = document.querySelector('.ad-form__reset');
 
 const setFormDefault = () => {
-  showSuccessMessage();
-  mapFilters.reset();
+  clearMarkerGroup();
   formNotice.reset();
-  setDefaultMainMarker();
+  mapFilters.reset();
   setDefaultAddress();
+  setDefaultMainMarker();
   setDefaultMap();
   priceNoticeInput.value = '';
   for (const opt of typeNoticeInput.options) {
     if (opt.hasAttribute('selected')) {
       typeNoticeInput.value = opt.value;
-      priceNoticeInput.setAttribute('placeholder', ACCORDANCE_TYPE_PRICE[opt.value]);
+      priceNoticeInput.setAttribute('placeholder', accordanceTypePrice[opt.value]);
     }
   }
   for (const opt of capacityNoticeSelect.options) {
@@ -38,6 +45,16 @@ const setFormDefault = () => {
     }
   }
 };
+
+const setFormDefaultButtonSubmit = () => {
+  showSuccessMessage();
+  setFormDefault();
+};
+
+buttonFormReset.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  setFormDefault();
+});
 
 const deactivateForm = () => {
   formNotice.classList.add('ad-form--disabled');
@@ -75,10 +92,10 @@ const validateForm = () => {
   priceNoticeInput.addEventListener('input', () => {
     const value = priceNoticeInput.value;
 
-    if (value > MAX_PRICE_LENGTH) {
-      priceNoticeInput.setCustomValidity(`Максимальная цена - ${ MAX_PRICE_LENGTH }`);
-    } else if (value < Number(ACCORDANCE_TYPE_PRICE[typeNoticeInput.value])) {
-      priceNoticeInput.setCustomValidity(`Минимальная цена - ${ Number(ACCORDANCE_TYPE_PRICE[typeNoticeInput.value]) }`);
+    if (value > MAX_PRICE_VALUE) {
+      priceNoticeInput.setCustomValidity(`Максимальная цена - ${MAX_PRICE_VALUE}`);
+    } else if (value < Number(accordanceTypePrice[typeNoticeInput.value])) {
+      priceNoticeInput.setCustomValidity(`Минимальная цена - ${Number(accordanceTypePrice[typeNoticeInput.value])}`);
     } else {
       priceNoticeInput.setCustomValidity('');
     }
@@ -128,15 +145,15 @@ const validateForm = () => {
   });
 
   typeNoticeInput.addEventListener('input', (evt) => {
-    priceNoticeInput.setAttribute('placeholder', ACCORDANCE_TYPE_PRICE[evt.target.value]);
+    priceNoticeInput.setAttribute('placeholder', accordanceTypePrice[evt.target.value]);
 
     if (priceNoticeInput.value) {
       const value = priceNoticeInput.value;
 
-      if (value > MAX_PRICE_LENGTH) {
-        priceNoticeInput.setCustomValidity(`Максимальная цена - ${ MAX_PRICE_LENGTH }`);
-      } else if (value < Number(ACCORDANCE_TYPE_PRICE[typeNoticeInput.value])) {
-        priceNoticeInput.setCustomValidity(`Минимальная цена - ${ Number(ACCORDANCE_TYPE_PRICE[typeNoticeInput.value]) }`);
+      if (value > MAX_PRICE_VALUE) {
+        priceNoticeInput.setCustomValidity(`Максимальная цена - ${ MAX_PRICE_VALUE }`);
+      } else if (value < Number(accordanceTypePrice[typeNoticeInput.value])) {
+        priceNoticeInput.setCustomValidity(`Минимальная цена - ${ Number(accordanceTypePrice[typeNoticeInput.value]) }`);
       } else {
         priceNoticeInput.setCustomValidity('');
       }
@@ -145,6 +162,7 @@ const validateForm = () => {
     }
   });
 };
+
 const setUserFormSubmit = (onSuccess) => {
   formNotice.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -155,9 +173,4 @@ const setUserFormSubmit = (onSuccess) => {
   });
 };
 
-buttonFormReset.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  setFormDefault();
-});
-
-export {deactivateForm, activateForm, setUserFormSubmit, setFormDefault, validateForm, addressNoticeInput};
+export {deactivateForm, activateForm, setUserFormSubmit, setFormDefaultButtonSubmit, setFormDefault, validateForm, addressNoticeInput};
