@@ -1,15 +1,8 @@
 import {sendData} from './api.js';
-import {MAX_PRICE_VALUE, MAX_TITLE_LENGTH, MIN_TITLE_LENGTH} from './constants.js';
+import {accordanceTypePrice, MAX_PRICE_VALUE, MAX_TITLE_LENGTH, MIN_TITLE_LENGTH} from './constants.js';
 import {setDefaultAddress, setDefaultMainMarker, setDefaultMap, clearMarkerGroup} from './map.js';
 import {showSuccessMessage} from './popup-messages.js';
 
-const accordanceTypePrice = {
-  bungalow: '0',
-  flat: '1000',
-  hotel: '3000',
-  house: '5000',
-  palace: '10000',
-};
 const mapFilters = document.querySelector('.map__filters');
 const formNotice = document.querySelector('.ad-form');
 const fieldset = formNotice.getElementsByTagName('fieldset');
