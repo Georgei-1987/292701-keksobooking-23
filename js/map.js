@@ -63,9 +63,7 @@ const loadMap = ( cb ) => {
   map.on('load', () => {
     activateForm();
     addMainMarker();
-    // setTimeout(() => {
-      cb();
-    // }, 2000);
+    cb();
   });
   addMap();
   setDefaultMap();
