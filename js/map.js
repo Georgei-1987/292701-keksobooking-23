@@ -1,5 +1,5 @@
 import {LAT_TOKYO, LNG_TOKYO, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, ROUNDING_FOR_LOCATION, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP} from './constants.js';
-import {addressNoticeInput} from './form.js';
+import {addressNoticeInput, activateForm} from './form.js';
 import {renderNotice} from './render-element.js';
 
 const map = L.map('map-canvas');
@@ -24,6 +24,17 @@ const mainPinMarker = L.marker(
   },
 );
 
+const addMainMarker = () => {
+  mainPinMarker.addTo(map);
+  mainPinMarker.on('moveend', (evt) => {
+    addressNoticeInput.value = `${evt.target.getLatLng().lat.toFixed(ROUNDING_FOR_LOCATION)}, ${evt.target.getLatLng().lng.toFixed(ROUNDING_FOR_LOCATION)}`;
+  });
+};
+
+const setDefaultMainMarker = () => {
+  mainPinMarker.setLatLng([LAT_TOKYO, LNG_TOKYO]);
+};
+
 const clearMarkerGroup = () => {
   markerGroup.clearLayers();
 };
@@ -32,8 +43,13 @@ const setDefaultAddress = () => {
   addressNoticeInput.value = `${LAT_TOKYO}, ${LNG_TOKYO}`;
 };
 
-const setDefaultMainMarker = () => {
-  mainPinMarker.setLatLng([LAT_TOKYO, LNG_TOKYO]);
+const addMap = () => {
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
 };
 
 const setDefaultMap = () => {
@@ -43,27 +59,16 @@ const setDefaultMap = () => {
   }, ZOOM_MAP);
 };
 
-const onMapLoad = (cb) => {
+const loadMap = ( cb ) => {
   map.on('load', () => {
-    cb();
+    activateForm();
+    addMainMarker();
+    // setTimeout(() => {
+      cb();
+    // }, 2000);
   });
-
-  map.setView({
-    lat: LAT_TOKYO,
-    lng: LNG_TOKYO,
-  }, ZOOM_MAP);
-
-  mainPinMarker.addTo(map);
-  mainPinMarker.on('moveend', (evt) => {
-    addressNoticeInput.value = `${evt.target.getLatLng().lat.toFixed(ROUNDING_FOR_LOCATION)}, ${evt.target.getLatLng().lng.toFixed(ROUNDING_FOR_LOCATION)}`;
-  });
-
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-  ).addTo(map);
+  addMap();
+  setDefaultMap();
 };
 
 const createMarker = (notice) => {
@@ -100,4 +105,4 @@ const renderMarkers = (notices) => {
     });
 };
 
-export {clearMarkerGroup, onMapLoad, renderMarkers, setDefaultAddress, setDefaultMainMarker, setDefaultMap};
+export {clearMarkerGroup, loadMap, renderMarkers, setDefaultAddress, setDefaultMainMarker, setDefaultMap};

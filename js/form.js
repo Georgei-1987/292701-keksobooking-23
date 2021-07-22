@@ -11,8 +11,11 @@ const accordanceTypePrice = {
   palace: '10000',
 };
 const mapFilters = document.querySelector('.map__filters');
+const mapFiltersSelect = mapFilters.querySelectorAll('.map__filter');
+const mapFeaturesFieldset = mapFilters.querySelector('.map__features');
 const formNotice = document.querySelector('.ad-form');
-const fieldset = formNotice.getElementsByTagName('fieldset');
+const formHeaderFieldset = formNotice.querySelector('.ad-form-header');
+const formElementFieldset = formNotice.querySelectorAll('.ad-form__element');
 const addressNoticeInput = formNotice.querySelector('#address');
 const capacityNoticeSelect = formNotice.querySelector('#capacity');
 const priceNoticeInput = formNotice.querySelector('#price');
@@ -21,7 +24,7 @@ const timeInNoticeSelect = formNotice.querySelector('#timein');
 const timeOutNoticeSelect = formNotice.querySelector('#timeout');
 const typeNoticeInput = formNotice.querySelector('#type');
 const titleNoticeInput = formNotice.querySelector('#title');
-const buttonFormReset = document.querySelector('.ad-form__reset');
+const buttonFormReset = formNotice.querySelector('.ad-form__reset');
 
 const setFormDefault = () => {
   clearMarkerGroup();
@@ -58,20 +61,37 @@ buttonFormReset.addEventListener('click', (evt) => {
 
 const deactivateForm = () => {
   formNotice.classList.add('ad-form--disabled');
-  mapFilters.classList.add('map__filters--disabled');
-  for (const elem of fieldset) {
+  formHeaderFieldset.setAttribute('disabled', '');
+
+  for (const elem of formElementFieldset) {
     elem.setAttribute('disabled', '');
+  }
+
+  mapFilters.classList.add('map__filters--disabled');
+  mapFeaturesFieldset.setAttribute('disabled', '');
+  for (const select of mapFiltersSelect) {
+    select.setAttribute('disabled', '');
   }
 };
 
 const activateForm = () => {
   formNotice.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('map__filters--disabled');
-  for (const elem of fieldset) {
+  formHeaderFieldset.removeAttribute('disabled');
+
+  for (const elem of formElementFieldset) {
     elem.removeAttribute('disabled');
   }
 
   setDefaultAddress();
+};
+
+const activateMapFilters = () => {
+  mapFilters.classList.remove('map__filters--disabled');
+  mapFeaturesFieldset.removeAttribute('disabled');
+
+  for (const select of mapFiltersSelect) {
+    select.removeAttribute('disabled');
+  }
 };
 
 const validateForm = () => {
@@ -173,4 +193,4 @@ const setUserFormSubmit = (onSuccess) => {
   });
 };
 
-export {deactivateForm, activateForm, setUserFormSubmit, setFormDefaultButtonSubmit, setFormDefault, validateForm, addressNoticeInput};
+export {deactivateForm, activateForm, activateMapFilters, setUserFormSubmit, setFormDefaultButtonSubmit, setFormDefault, validateForm, addressNoticeInput};

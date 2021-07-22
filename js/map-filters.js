@@ -1,4 +1,5 @@
 import {MIN_PRICE_RANGE, MAX_PRICE_RANGE, RERENDER_DELAY, SIMILAR_NOTICE_COUNT} from './constants.js';
+import {activateMapFilters} from './form.js';
 import {clearMarkerGroup, renderMarkers} from './map.js';
 import {debounce} from './utils/debounce.js';
 
@@ -52,6 +53,7 @@ const getNoticeRank = (notice) => {
     for (const feature of notice.offer.features) {
       if (feature === wifiFilter.value) {
         rank++;
+        break;
       }
     }
   }
@@ -60,6 +62,7 @@ const getNoticeRank = (notice) => {
     for (const feature of notice.offer.features) {
       if (feature === dishwasherFilter.value) {
         rank++;
+        break;
       }
     }
   }
@@ -68,6 +71,7 @@ const getNoticeRank = (notice) => {
     for (const feature of notice.offer.features) {
       if (feature === parkingFilter.value) {
         rank++;
+        break;
       }
     }
   }
@@ -76,6 +80,7 @@ const getNoticeRank = (notice) => {
     for (const feature of notice.offer.features) {
       if (feature === washerFilter.value) {
         rank++;
+        break;
       }
     }
   }
@@ -84,6 +89,7 @@ const getNoticeRank = (notice) => {
     for (const feature of notice.offer.features) {
       if (feature === elevatorFilter.value) {
         rank++;
+        break;
       }
     }
   }
@@ -92,6 +98,7 @@ const getNoticeRank = (notice) => {
     for (const feature of notice.offer.features) {
       if (feature === conditionerFilter.value) {
         rank++;
+        break;
       }
     }
   }
@@ -116,6 +123,7 @@ const handleFiltersChange = (data) => debounce(() => {
 }, RERENDER_DELAY);
 
 const filtersHandler = (data) => {
+  mapFilters.addEventListener('input', handleFiltersChange(data));
   mapFilters.addEventListener('reset', () => {
     renderMarkers(Array
       .from(data)
@@ -125,7 +133,7 @@ const filtersHandler = (data) => {
   renderMarkers(Array
     .from(data)
     .slice(0, SIMILAR_NOTICE_COUNT));
-  mapFilters.addEventListener('input', handleFiltersChange(data));
+  activateMapFilters();
 };
 
 export {filtersHandler};

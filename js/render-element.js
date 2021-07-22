@@ -6,23 +6,11 @@ const objectType = {
   hotel: 'Отель',
 };
 
-const addPropertyTitle = (element, property) => {
-  const title = element.querySelector('.popup__title');
+const addProperty = (element, field, property) => {
   if (property) {
-    title.textContent = property;
+    field.textContent = property;
   } else {
-    title.style.display = 'none';
-  }
-
-  return element;
-};
-
-const addPropertyAddress = (element, property) => {
-  const address = element.querySelector('.popup__text--address');
-  if (property) {
-    address.textContent = property;
-  } else {
-    address.style.display = 'none';
+    field.style.display = 'none';
   }
 
   return element;
@@ -81,6 +69,12 @@ const addPropertyFeature = (element, property) => {
   const featureWasher = element.querySelector('.popup__feature--washer');
   const featureElevator = element.querySelector('.popup__feature--elevator');
   const featureConditioner = element.querySelector('.popup__feature--conditioner');
+
+  const displayElementFeature = (nameElement) => {
+    nameElement.style.display = '';
+    featuresList.appendChild(nameElement);
+  };
+
   if (property) {
     for (const elem of featuresElements) {
       elem.style.display = 'none';
@@ -89,44 +83,27 @@ const addPropertyFeature = (element, property) => {
     for (const feature of property) {
       switch (feature) {
         case 'wifi':
-          featureWifi.style.display = '';
-          featuresList.appendChild(featureWifi);
+          displayElementFeature(featureWifi);
           break;
         case 'dishwasher':
-          featureDishwasher.style.display = '';
-          featuresList.appendChild(featureDishwasher);
+          displayElementFeature(featureDishwasher);
           break;
         case 'parking':
-          featureParking.style.display = '';
-          featuresList.appendChild(featureParking);
+          displayElementFeature(featureParking);
           break;
         case 'washer':
-          featureWasher.style.display = '';
-          featuresList.appendChild(featureWasher);
+          displayElementFeature(featureWasher);
           break;
         case 'elevator':
-          featureElevator.style.display = '';
-          featuresList.appendChild(featureElevator);
+          displayElementFeature(featureElevator);
           break;
         case 'conditioner':
-          featureConditioner.style.display = '';
-          featuresList.appendChild(featureConditioner);
+          displayElementFeature(featureConditioner);
           break;
       }
     }
   } else {
     featuresList.style.display = 'none';
-  }
-
-  return element;
-};
-
-const addPropertyDescription = (element, property) => {
-  const description = element.querySelector('.popup__description');
-  if (property) {
-    description.textContent = property;
-  } else {
-    description.style.display = 'none';
   }
 
   return element;
@@ -164,15 +141,18 @@ const addPropertyAvatar = (element, property) => {
 const renderNotice = (notice) => {
   const noticeTemplate = document.querySelector('#card').content.querySelector('.popup');
   const noticeElement = noticeTemplate.cloneNode(true);
+  const address = noticeElement.querySelector('.popup__text--address');
+  const description = noticeElement.querySelector('.popup__description');
+  const title = noticeElement.querySelector('.popup__title');
 
-  addPropertyTitle (noticeElement, notice.offer.title);
-  addPropertyAddress (noticeElement, notice.offer.address);
+  addProperty(noticeElement, title, notice.offer.title);
+  addProperty(noticeElement, address, notice.offer.address);
   addPropertyPrice (noticeElement, notice.offer.price);
   addPropertyType (noticeElement, notice.offer.type);
   addPropertyCapacity (noticeElement, notice.offer.rooms, notice.offer.guests);
   addPropertyTime (noticeElement, notice.offer.checkin, notice.offer.checkout);
   addPropertyFeature (noticeElement, notice.offer.features);
-  addPropertyDescription (noticeElement, notice.offer.description);
+  addProperty(noticeElement, description, notice.offer.description);
   addPropertyPhoto (noticeElement, notice.offer.photos);
   addPropertyAvatar (noticeElement, notice.author.avatar);
 
