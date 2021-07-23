@@ -1,22 +1,14 @@
 import {getData} from './api.js';
-import {deactivateForm, setUserFormSubmit, validateForm, setFormDefaultButtonSubmit} from './form.js';
-import {loadMap} from './map.js';
-import {filtersHandler} from './map-filters.js';
+import {deactivateNoticeForm} from './form.js';
+import {fulfillRendering, loadMap} from './map.js';
+import {deactivateFilterForm} from './map-filters.js';
 
-deactivateForm();
-
-// setTimeout(() => {
-
-  loadMap( () => {
-    getData( (notices) => {
-      // setTimeout( () => {
-        filtersHandler(notices);
-      // }, 2000 );
-
-    });
+deactivateNoticeForm();
+deactivateFilterForm();
+loadMap(() => {
+  getData((notices) => {
+    fulfillRendering(notices);
   });
+});
 
-// }, 2000);
 
-validateForm();
-setUserFormSubmit(setFormDefaultButtonSubmit);

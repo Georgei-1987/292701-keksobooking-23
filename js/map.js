@@ -1,7 +1,9 @@
-import {LAT_TOKYO, LNG_TOKYO, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, ROUNDING_FOR_LOCATION, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP} from './constants.js';
-import {addressNoticeInput, activateForm} from './form.js';
+import {LAT_TOKYO, LNG_TOKYO, HEIGHT_MAIN_PIN, HEIGHT_SIMILAR_PIN, ROUNDING_FOR_LOCATION, SIMILAR_NOTICE_COUNT, WIDTH_MAIN_PIN, WIDTH_SIMILAR_PIN, ZOOM_MAP} from './constants.js';
+import {activateNoticeForm} from './form.js';
+import {activateFilterForm, appointEventListeners} from './map-filters.js';
 import {renderNotice} from './render-element.js';
 
+const addressNoticeInput = document.querySelector('#address');
 const map = L.map('map-canvas');
 const markerGroup = L.layerGroup().addTo(map);
 
@@ -59,9 +61,9 @@ const setDefaultMap = () => {
   }, ZOOM_MAP);
 };
 
-const loadMap = ( cb ) => {
+const loadMap = (cb) => {
   map.on('load', () => {
-    activateForm();
+    activateNoticeForm();
     addMainMarker();
     cb();
   });
@@ -103,4 +105,14 @@ const renderMarkers = (notices) => {
     });
 };
 
-export {clearMarkerGroup, loadMap, renderMarkers, setDefaultAddress, setDefaultMainMarker, setDefaultMap};
+const fulfillRendering = (data) => {
+  appointEventListeners(data);
+
+  renderMarkers(Array
+    .from(data)
+    .slice(0, SIMILAR_NOTICE_COUNT));
+
+  activateFilterForm();
+};
+
+export {clearMarkerGroup, fulfillRendering, loadMap, renderMarkers, setDefaultAddress, setDefaultMainMarker, setDefaultMap};

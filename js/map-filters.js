@@ -1,9 +1,10 @@
-import {MIN_PRICE_RANGE, MAX_PRICE_RANGE, RERENDER_DELAY, SIMILAR_NOTICE_COUNT} from './constants.js';
-import {activateMapFilters} from './form.js';
+import {MIN_PRICE_RANGE, MAX_PRICE_RANGE, SIMILAR_NOTICE_COUNT, RERENDER_DELAY} from './constants.js';
 import {clearMarkerGroup, renderMarkers} from './map.js';
 import {debounce} from './utils/debounce.js';
 
 const mapFilters = document.querySelector('.map__filters');
+const mapFiltersSelect = mapFilters.querySelectorAll('.map__filter');
+const mapFeaturesFieldset = mapFilters.querySelector('.map__features');
 const typeFilter = mapFilters.querySelector('#housing-type');
 const priceFilter = mapFilters.querySelector('#housing-price');
 const roomsFilter = mapFilters.querySelector('#housing-rooms');
@@ -15,183 +16,92 @@ const washerFilter = mapFilters.querySelector('#filter-washer');
 const elevatorFilter = mapFilters.querySelector('#filter-elevator');
 const conditionerFilter = mapFilters.querySelector('#filter-conditioner');
 
-// const getNoticeRank = (notice) => {
+const deactivateFilterForm = () => {
+  mapFilters.classList.add('map__filters--disabled');
+  mapFeaturesFieldset.setAttribute('disabled', '');
+  for (const select of mapFiltersSelect) {
+    select.setAttribute('disabled', '');
+  }
+};
 
-//   let rank = 0;
+const activateFilterForm = () => {
+  mapFilters.classList.remove('map__filters--disabled');
+  mapFeaturesFieldset.removeAttribute('disabled');
 
-//   if (notice.offer.type === typeFilter.value) {
-//     rank++;
-//   }
+  for (const select of mapFiltersSelect) {
+    select.removeAttribute('disabled');
+  }
+};
 
-//   if (priceFilter.value === 'middle') {
-//     if (notice.offer.price >= MIN_PRICE_RANGE && notice.offer.price <= MAX_PRICE_RANGE) {
-//       rank++;
-//     }
-//   }
+const resetFilterForm = () => {
+  mapFilters.reset();
+};
 
-//   if (priceFilter.value === 'low') {
-//     if (notice.offer.price < MIN_PRICE_RANGE) {
-//       rank++;
-//     }
-//   }
-
-//   if (priceFilter.value === 'high') {
-//     if (notice.offer.price > MAX_PRICE_RANGE) {
-//       rank++;
-//     }
-//   }
-
-//   if (notice.offer.rooms === Number(roomsFilter.value)) {
-//     rank++;
-//   }
-
-//   if (notice.offer.guests === Number(guestsFilter.value)) {
-//     rank++;
-//   }
-
-//   if (wifiFilter.checked && notice.offer.features) {
-//     for (const feature of notice.offer.features) {
-//       if (feature === wifiFilter.value) {
-//         rank++;
-//         break;
-//       }
-//     }
-//   }
-
-//   if (dishwasherFilter.checked && notice.offer.features) {
-//     for (const feature of notice.offer.features) {
-//       if (feature === dishwasherFilter.value) {
-//         rank++;
-//         break;
-//       }
-//     }
-//   }
-
-//   if (parkingFilter.checked && notice.offer.features) {
-//     for (const feature of notice.offer.features) {
-//       if (feature === parkingFilter.value) {
-//         rank++;
-//         break;
-//       }
-//     }
-//   }
-
-//   if (washerFilter.checked && notice.offer.features) {
-//     for (const feature of notice.offer.features) {
-//       if (feature === washerFilter.value) {
-//         rank++;
-//         break;
-//       }
-//     }
-//   }
-
-//   if (elevatorFilter.checked && notice.offer.features) {
-//     for (const feature of notice.offer.features) {
-//       if (feature === elevatorFilter.value) {
-//         rank++;
-//         break;
-//       }
-//     }
-//   }
-
-//   if (conditionerFilter.checked && notice.offer.features) {
-//     for (const feature of notice.offer.features) {
-//       if (feature === conditionerFilter.value) {
-//         rank++;
-//         break;
-//       }
-//     }
-//   }
-
-//   return rank;
-// };
-
-// const compareNotices = (noticeA, noticeB) => {
-//   const rankA = getNoticeRank(noticeA);
-//   const rankB = getNoticeRank(noticeB);
-
-//   return rankB - rankA;
-// };
-
-const handleFiltersChange = (data) => debounce( () => {
+const renderFilteredData = (data) => debounce( () => {
   clearMarkerGroup();
 
-  const changingArray = Array
+  const filteredNotices = Array
     .from(data)
-    .filter( (notice) => {
-      if (notice.offer.type === typeFilter.value || typeFilter.value === 'any' ) {
-        return true;
+    .filter((notice) => {
+      if (notice.offer.type !== typeFilter.value && typeFilter.value !== 'any') {
+        return false;
       }
-    })
-
-    // .filter( (notice) => {
-    //   if (priceFilter.value === 'middle' || priceFilter.value === 'any') {
-    //     if (notice.offer.price >= MIN_PRICE_RANGE && notice.offer.price <= MAX_PRICE_RANGE) {
-    //       return true;
-    //     }
-    //   }
-    // })
-
-    // .filter( (notice) => {
-    //   if (priceFilter.value === 'low' || priceFilter.value === 'any') {
-    //     if (notice.offer.price < MIN_PRICE_RANGE) {
-    //       return true;
-    //     }
-    //   }
-    // })
-
-    .filter( (notice) => {
-      if (notice.offer.rooms === Number(roomsFilter.value) || roomsFilter.value === 'any' ) {
-        return true;
+      switch (priceFilter.value) {
+        case 'middle':
+          if (notice.offer.price <= MIN_PRICE_RANGE || notice.offer.price >= MAX_PRICE_RANGE) {
+            return false;
+          }
+          break;
+        case 'low':
+          if (notice.offer.price > MIN_PRICE_RANGE) {
+            return false;
+          }
+          break;
+        case 'high':
+          if (notice.offer.price < MAX_PRICE_RANGE) {
+            return false;
+          }
+          break;
       }
+      if (notice.offer.rooms !== Number(roomsFilter.value) && roomsFilter.value !== 'any') {
+        return false;
+      }
+      if (notice.offer.guests !== Number(guestsFilter.value) && guestsFilter.value !== 'any') {
+        return false;
+      }
+      if (wifiFilter.checked && (!notice.offer.features || !notice.offer.features.includes(wifiFilter.value))) {
+        return false;
+      }
+      if (dishwasherFilter.checked && (!notice.offer.features || !notice.offer.features.includes(dishwasherFilter.value))) {
+        return false;
+      }
+      if (parkingFilter.checked && (!notice.offer.features || !notice.offer.features.includes(parkingFilter.value))) {
+        return false;
+      }
+      if (washerFilter.checked && (!notice.offer.features || !notice.offer.features.includes(washerFilter.value))) {
+        return false;
+      }
+      if (elevatorFilter.checked && (!notice.offer.features || !notice.offer.features.includes(elevatorFilter.value))) {
+        return false;
+      }
+      if (conditionerFilter.checked && (!notice.offer.features || !notice.offer.features.includes(conditionerFilter.value))) {
+        return false;
+      }
+
+      return true;
     })
     .slice(0, SIMILAR_NOTICE_COUNT);
 
-
-  renderMarkers(changingArray);
-
-    // Array.from(data)
-    // .filter(compareNotices2)
-    // .sort(compareNotices)
-    // .slice(0, SIMILAR_NOTICE_COUNT)
-    // );
+  renderMarkers(filteredNotices);
 }, RERENDER_DELAY);
 
-
-const filtersHandler = (data) => {
-  mapFilters.addEventListener( 'input', handleFiltersChange(data) );
+const appointEventListeners = (data) => {
+  mapFilters.addEventListener('input', renderFilteredData(data));
   mapFilters.addEventListener('reset', () => {
     renderMarkers(Array
       .from(data)
       .slice(0, SIMILAR_NOTICE_COUNT));
   });
-
-  renderMarkers(Array
-    .from(data)
-    .slice(0, SIMILAR_NOTICE_COUNT));
-  activateMapFilters();
 };
 
-export {filtersHandler};
-
-// const compareNotices2 = (notice) => {
-
-//   // let rank = 0;
-
-//   if (notice.offer.type === typeFilter.value/* || typeFilter.value === 'any'*/) {
-
-//     // if (notice.offer.rooms === Number(roomsFilter.value)) {
-//       return true;
-//     // }
-
-//   }
-
-//   // if (notice.offer.rooms === Number(roomsFilter.value)) {
-//   //   // rank++;
-//   // }
-
-//   // if (rank) {
-//   //   return true;
-//   // }
-//   // return false;
-// };
+export {activateFilterForm, appointEventListeners, deactivateFilterForm, resetFilterForm};

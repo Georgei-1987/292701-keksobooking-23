@@ -1,6 +1,7 @@
 import {sendData} from './api.js';
 import {MAX_PRICE_VALUE, MAX_TITLE_LENGTH, MIN_TITLE_LENGTH} from './constants.js';
 import {setDefaultAddress, setDefaultMainMarker, setDefaultMap, clearMarkerGroup} from './map.js';
+import {resetFilterForm} from './map-filters.js';
 import {showSuccessMessage} from './popup-messages.js';
 
 const accordanceTypePrice = {
@@ -10,13 +11,9 @@ const accordanceTypePrice = {
   house: '5000',
   palace: '10000',
 };
-const mapFilters = document.querySelector('.map__filters');
-const mapFiltersSelect = mapFilters.querySelectorAll('.map__filter');
-const mapFeaturesFieldset = mapFilters.querySelector('.map__features');
 const formNotice = document.querySelector('.ad-form');
 const formHeaderFieldset = formNotice.querySelector('.ad-form-header');
 const formElementFieldset = formNotice.querySelectorAll('.ad-form__element');
-const addressNoticeInput = formNotice.querySelector('#address');
 const capacityNoticeSelect = formNotice.querySelector('#capacity');
 const priceNoticeInput = formNotice.querySelector('#price');
 const roomNoticeSelect = formNotice.querySelector('#room_number');
@@ -26,10 +23,24 @@ const typeNoticeInput = formNotice.querySelector('#type');
 const titleNoticeInput = formNotice.querySelector('#title');
 const buttonFormReset = formNotice.querySelector('.ad-form__reset');
 
+const setUserFormSubmit = (onSuccess) => {
+  formNotice.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(
+      new FormData(evt.target),
+      () => onSuccess(),
+    );
+  });
+};
+
+const resetNoticeForm = () => {
+  formNotice.reset();
+};
+
 const setFormDefault = () => {
   clearMarkerGroup();
-  formNotice.reset();
-  mapFilters.reset();
+  resetNoticeForm();
+  resetFilterForm();
   setDefaultAddress();
   setDefaultMainMarker();
   setDefaultMap();
@@ -54,43 +65,12 @@ const setFormDefaultButtonSubmit = () => {
   setFormDefault();
 };
 
-buttonFormReset.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  setFormDefault();
-});
-
-const deactivateForm = () => {
+const deactivateNoticeForm = () => {
   formNotice.classList.add('ad-form--disabled');
   formHeaderFieldset.setAttribute('disabled', '');
 
   for (const elem of formElementFieldset) {
     elem.setAttribute('disabled', '');
-  }
-
-  mapFilters.classList.add('map__filters--disabled');
-  mapFeaturesFieldset.setAttribute('disabled', '');
-  for (const select of mapFiltersSelect) {
-    select.setAttribute('disabled', '');
-  }
-};
-
-const activateForm = () => {
-  formNotice.classList.remove('ad-form--disabled');
-  formHeaderFieldset.removeAttribute('disabled');
-
-  for (const elem of formElementFieldset) {
-    elem.removeAttribute('disabled');
-  }
-
-  setDefaultAddress();
-};
-
-const activateMapFilters = () => {
-  mapFilters.classList.remove('map__filters--disabled');
-  mapFeaturesFieldset.removeAttribute('disabled');
-
-  for (const select of mapFiltersSelect) {
-    select.removeAttribute('disabled');
   }
 };
 
@@ -183,14 +163,20 @@ const validateForm = () => {
   });
 };
 
-const setUserFormSubmit = (onSuccess) => {
-  formNotice.addEventListener('submit', (evt) => {
+const activateNoticeForm = () => {
+  formNotice.classList.remove('ad-form--disabled');
+  formHeaderFieldset.removeAttribute('disabled');
+  for (const elem of formElementFieldset) {
+    elem.removeAttribute('disabled');
+  }
+
+  setDefaultAddress();
+  validateForm();
+  setUserFormSubmit(setFormDefaultButtonSubmit);
+  buttonFormReset.addEventListener('click', (evt) => {
     evt.preventDefault();
-    sendData(
-      new FormData(evt.target),
-      () => onSuccess(),
-    );
+    setFormDefault();
   });
 };
 
-export {deactivateForm, activateForm, activateMapFilters, setUserFormSubmit, setFormDefaultButtonSubmit, setFormDefault, validateForm, addressNoticeInput};
+export {deactivateNoticeForm, activateNoticeForm};
