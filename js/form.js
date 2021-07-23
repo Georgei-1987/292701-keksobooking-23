@@ -22,6 +22,11 @@ const timeOutNoticeSelect = formNotice.querySelector('#timeout');
 const typeNoticeInput = formNotice.querySelector('#type');
 const titleNoticeInput = formNotice.querySelector('#title');
 const buttonFormReset = formNotice.querySelector('.ad-form__reset');
+const collectionCapacity = capacityNoticeSelect.children;
+
+const setAttributeDisabled = (number) => {
+  collectionCapacity[`${number}`].setAttribute('disabled', '');
+};
 
 const setUserFormSubmit = (onSuccess) => {
   formNotice.addEventListener('submit', (evt) => {
@@ -90,75 +95,76 @@ const validateForm = () => {
   });
 
   priceNoticeInput.addEventListener('input', () => {
-    const value = priceNoticeInput.value;
+    const elem = priceNoticeInput;
+    const priceValue = accordanceTypePrice[typeNoticeInput.value];
 
-    if (value > MAX_PRICE_VALUE) {
-      priceNoticeInput.setCustomValidity(`Максимальная цена - ${MAX_PRICE_VALUE}`);
-    } else if (value < Number(accordanceTypePrice[typeNoticeInput.value])) {
-      priceNoticeInput.setCustomValidity(`Минимальная цена - ${Number(accordanceTypePrice[typeNoticeInput.value])}`);
+    if (elem.value > MAX_PRICE_VALUE) {
+      elem.setCustomValidity(`Максимальная цена - ${MAX_PRICE_VALUE}`);
+    } else if (elem.value < Number(priceValue)) {
+      elem.setCustomValidity(`Минимальная цена - ${Number(priceValue)}`);
     } else {
-      priceNoticeInput.setCustomValidity('');
+      elem.setCustomValidity('');
     }
 
-    priceNoticeInput.reportValidity();
+    elem.reportValidity();
   });
 
   roomNoticeSelect.addEventListener('input', (evt) => {
-    const collectionCapacity = capacityNoticeSelect.children;
     for (const element of collectionCapacity) {
       element.removeAttribute('disabled');
     }
 
     switch (evt.target.value) {
       case '1':
-        collectionCapacity[0].setAttribute('disabled', '');
-        collectionCapacity[1].setAttribute('disabled', '');
-        collectionCapacity[3].setAttribute('disabled', '');
+        setAttributeDisabled(0);
+        setAttributeDisabled(1);
+        setAttributeDisabled(3);
         break;
       case '2':
-        collectionCapacity[0].setAttribute('disabled', '');
-        collectionCapacity[3].setAttribute('disabled', '');
+        setAttributeDisabled(0);
+        setAttributeDisabled(3);
         break;
       case '3':
-        collectionCapacity[3].setAttribute('disabled', '');
+        setAttributeDisabled(3);
         break;
       case '100':
-        collectionCapacity[0].setAttribute('disabled', '');
-        collectionCapacity[1].setAttribute('disabled', '');
-        collectionCapacity[2].setAttribute('disabled', '');
+        setAttributeDisabled(0);
+        setAttributeDisabled(1);
+        setAttributeDisabled(2);
         break;
     }
   });
 
   titleNoticeInput.addEventListener('input', () => {
-    const valueLength = titleNoticeInput.value.length;
+    const elem = titleNoticeInput;
+    const length = elem.value.length;
 
-    if (valueLength < MIN_TITLE_LENGTH) {
-      titleNoticeInput.setCustomValidity(`Осталось ввести ${ MIN_TITLE_LENGTH - valueLength } симв.`);
-    } else if (valueLength > MAX_TITLE_LENGTH) {
-      titleNoticeInput.setCustomValidity(`Удалите лишние ${ valueLength - MAX_TITLE_LENGTH } симв.`);
+    if (length < MIN_TITLE_LENGTH) {
+      elem.setCustomValidity(`Осталось ввести ${MIN_TITLE_LENGTH - length} симв.`);
+    } else if (length > MAX_TITLE_LENGTH) {
+      elem.setCustomValidity(`Удалите лишние ${length - MAX_TITLE_LENGTH} симв.`);
     } else {
-      titleNoticeInput.setCustomValidity('');
+      elem.setCustomValidity('');
     }
 
-    titleNoticeInput.reportValidity();
+    elem.reportValidity();
   });
 
   typeNoticeInput.addEventListener('input', (evt) => {
-    priceNoticeInput.setAttribute('placeholder', accordanceTypePrice[evt.target.value]);
+    const elem = priceNoticeInput;
+    const priceValue = accordanceTypePrice[typeNoticeInput.value];
+    elem.setAttribute('placeholder', accordanceTypePrice[evt.target.value]);
 
-    if (priceNoticeInput.value) {
-      const value = priceNoticeInput.value;
-
-      if (value > MAX_PRICE_VALUE) {
-        priceNoticeInput.setCustomValidity(`Максимальная цена - ${ MAX_PRICE_VALUE }`);
-      } else if (value < Number(accordanceTypePrice[typeNoticeInput.value])) {
-        priceNoticeInput.setCustomValidity(`Минимальная цена - ${ Number(accordanceTypePrice[typeNoticeInput.value]) }`);
+    if (elem.value) {
+      if (elem.value > MAX_PRICE_VALUE) {
+        elem.setCustomValidity(`Максимальная цена - ${MAX_PRICE_VALUE}`);
+      } else if (elem.value < Number(priceValue)) {
+        elem.setCustomValidity(`Минимальная цена - ${Number(priceValue)}`);
       } else {
-        priceNoticeInput.setCustomValidity('');
+        elem.setCustomValidity('');
       }
 
-      priceNoticeInput.reportValidity();
+      elem.reportValidity();
     }
   });
 };
