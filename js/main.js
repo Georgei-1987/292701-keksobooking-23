@@ -2,6 +2,7 @@ import {getData} from './api.js';
 import {deactivateNoticeForm} from './form.js';
 import {fulfillRendering, loadMap} from './map.js';
 import {deactivateFilterForm} from './map-filters.js';
+import './avatar.js';
 
 deactivateNoticeForm();
 deactivateFilterForm();

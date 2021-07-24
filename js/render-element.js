@@ -60,50 +60,31 @@ const addPropertyTime = (element, firstProperty, secondProperty) => {
   return element;
 };
 
-const addPropertyFeature = (element, property) => {
+const addPropertyFeature = (element, array) => {
   const featuresList = element.querySelector('.popup__features');
   const featuresElements = element.querySelectorAll('.popup__feature');
-  const featureWifi = element.querySelector('.popup__feature--wifi');
-  const featureDishwasher = element.querySelector('.popup__feature--dishwasher');
-  const featureParking = element.querySelector('.popup__feature--parking');
-  const featureWasher = element.querySelector('.popup__feature--washer');
-  const featureElevator = element.querySelector('.popup__feature--elevator');
-  const featureConditioner = element.querySelector('.popup__feature--conditioner');
 
   const displayElementFeature = (nameElement) => {
     nameElement.style.display = '';
     featuresList.appendChild(nameElement);
   };
 
-  if (property) {
+  const displayOff = (elem) => {
+    elem.style.display = 'none';
+  };
+
+  if (array) {
     for (const elem of featuresElements) {
-      elem.style.display = 'none';
+      displayOff(elem);
     }
 
-    for (const feature of property) {
-      switch (feature) {
-        case 'wifi':
-          displayElementFeature(featureWifi);
-          break;
-        case 'dishwasher':
-          displayElementFeature(featureDishwasher);
-          break;
-        case 'parking':
-          displayElementFeature(featureParking);
-          break;
-        case 'washer':
-          displayElementFeature(featureWasher);
-          break;
-        case 'elevator':
-          displayElementFeature(featureElevator);
-          break;
-        case 'conditioner':
-          displayElementFeature(featureConditioner);
-          break;
+    for (const feature of array) {
+      if (array.includes(feature)) {
+        displayElementFeature(element.querySelector(`.popup__feature--${feature}`));
       }
     }
   } else {
-    featuresList.style.display = 'none';
+    displayOff(featuresList);
   }
 
   return element;
@@ -139,7 +120,10 @@ const addPropertyAvatar = (element, property) => {
 };
 
 const renderNotice = (notice) => {
-  const noticeTemplate = document.querySelector('#card').content.querySelector('.popup');
+  const noticeTemplate = document
+    .querySelector('#card')
+    .content
+    .querySelector('.popup');
   const noticeElement = noticeTemplate.cloneNode(true);
   const address = noticeElement.querySelector('.popup__text--address');
   const description = noticeElement.querySelector('.popup__description');

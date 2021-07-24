@@ -40,6 +40,12 @@ const resetFilterForm = () => {
 const renderFilteredData = (data) => debounce( () => {
   clearMarkerGroup();
 
+  const getBooleanValue = (elem, selector) => {
+    if (elem !== Number(selector.value) && selector.value !== 'any') {
+      return true;
+    }
+  };
+
   const filteredNotices = Array
     .from(data)
     .filter((notice) => {
@@ -63,9 +69,13 @@ const renderFilteredData = (data) => debounce( () => {
           }
           break;
       }
-      if (notice.offer.rooms !== Number(roomsFilter.value) && roomsFilter.value !== 'any') {
-        return false;
-      }
+
+      getBooleanValue(notice.offer.rooms, roomsFilter);
+
+      // if (notice.offer.rooms !== Number(roomsFilter.value) && roomsFilter.value !== 'any') {
+      //   return false;
+      // }
+
       if (notice.offer.guests !== Number(guestsFilter.value) && guestsFilter.value !== 'any') {
         return false;
       }

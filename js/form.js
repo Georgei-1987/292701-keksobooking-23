@@ -1,5 +1,6 @@
 import {sendData} from './api.js';
 import {MAX_PRICE_VALUE, MAX_TITLE_LENGTH, MIN_TITLE_LENGTH} from './constants.js';
+import {removeImages, previewImage, housingImage} from './avatar.js';
 import {setDefaultAddress, setDefaultMainMarker, setDefaultMap, clearMarkerGroup} from './map.js';
 import {resetFilterForm} from './map-filters.js';
 import {showSuccessMessage} from './popup-messages.js';
@@ -24,8 +25,10 @@ const titleNoticeInput = formNotice.querySelector('#title');
 const buttonFormReset = formNotice.querySelector('.ad-form__reset');
 const collectionCapacity = capacityNoticeSelect.children;
 
-const setAttributeDisabled = (number) => {
-  collectionCapacity[`${number}`].setAttribute('disabled', '');
+const setAttributeDisabled = (array) => {
+  array.forEach((number) => {
+    collectionCapacity[`${number}`].setAttribute('disabled', '');
+  });
 };
 
 const setUserFormSubmit = (onSuccess) => {
@@ -49,6 +52,7 @@ const setFormDefault = () => {
   setDefaultAddress();
   setDefaultMainMarker();
   setDefaultMap();
+  removeImages(previewImage, housingImage);
   priceNoticeInput.value = '';
   for (const opt of typeNoticeInput.options) {
     if (opt.hasAttribute('selected')) {
@@ -116,21 +120,16 @@ const validateForm = () => {
 
     switch (evt.target.value) {
       case '1':
-        setAttributeDisabled(0);
-        setAttributeDisabled(1);
-        setAttributeDisabled(3);
+        setAttributeDisabled([0,1,3]);
         break;
       case '2':
-        setAttributeDisabled(0);
-        setAttributeDisabled(3);
+        setAttributeDisabled([0,3]);
         break;
       case '3':
-        setAttributeDisabled(3);
+        setAttributeDisabled([3]);
         break;
       case '100':
-        setAttributeDisabled(0);
-        setAttributeDisabled(1);
-        setAttributeDisabled(2);
+        setAttributeDisabled([0,1,2]);
         break;
     }
   });
