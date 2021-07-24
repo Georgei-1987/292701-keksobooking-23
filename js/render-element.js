@@ -6,6 +6,11 @@ const objectType = {
   hotel: 'Отель',
 };
 
+const displayElementFeature = (elem, list) => {
+  elem.style.display = '';
+  list.appendChild(elem);
+};
+
 const addProperty = (element, field, property) => {
   if (property) {
     field.textContent = property;
@@ -62,29 +67,20 @@ const addPropertyTime = (element, firstProperty, secondProperty) => {
 
 const addPropertyFeature = (element, array) => {
   const featuresList = element.querySelector('.popup__features');
-  const featuresElements = element.querySelectorAll('.popup__feature');
-
-  const displayElementFeature = (nameElement) => {
-    nameElement.style.display = '';
-    featuresList.appendChild(nameElement);
-  };
-
-  const displayOff = (elem) => {
-    elem.style.display = 'none';
-  };
+  const featuresElements = featuresList.querySelectorAll('.popup__feature');
 
   if (array) {
     for (const elem of featuresElements) {
-      displayOff(elem);
+      elem.style.display = 'none';
     }
 
     for (const feature of array) {
       if (array.includes(feature)) {
-        displayElementFeature(element.querySelector(`.popup__feature--${feature}`));
+        displayElementFeature(element.querySelector(`.popup__feature--${feature}`), featuresList);
       }
     }
   } else {
-    displayOff(featuresList);
+    featuresList.style.display = 'none';
   }
 
   return element;
@@ -92,7 +88,7 @@ const addPropertyFeature = (element, array) => {
 
 const addPropertyPhoto = (element, property) => {
   const popupPhotos = element.querySelector('.popup__photos');
-  const popupPhoto = element.querySelector('.popup__photo');
+  const popupPhoto = popupPhotos.querySelector('.popup__photo');
   popupPhoto.style.display = 'none';
   if (property) {
     for (const src of property) {

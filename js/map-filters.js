@@ -37,69 +37,63 @@ const resetFilterForm = () => {
   mapFilters.reset();
 };
 
+const isAccordNoticeToFilter = (notice) => {
+  if (notice.offer.type !== typeFilter.value && typeFilter.value !== 'any') {
+    return false;
+  }
+
+  switch (priceFilter.value) {
+    case 'middle':
+      if (notice.offer.price <= MIN_PRICE_RANGE || notice.offer.price >= MAX_PRICE_RANGE) {
+        return false;
+      }
+      break;
+    case 'low':
+      if (notice.offer.price > MIN_PRICE_RANGE) {
+        return false;
+      }
+      break;
+    case 'high':
+      if (notice.offer.price < MAX_PRICE_RANGE) {
+        return false;
+      }
+      break;
+  }
+
+  if (notice.offer.rooms !== Number(roomsFilter.value) && roomsFilter.value !== 'any') {
+    return false;
+  }
+
+  if (notice.offer.guests !== Number(guestsFilter.value) && guestsFilter.value !== 'any') {
+    return false;
+  }
+  if (wifiFilter.checked && (!notice.offer.features || !notice.offer.features.includes(wifiFilter.value))) {
+    return false;
+  }
+  if (dishwasherFilter.checked && (!notice.offer.features || !notice.offer.features.includes(dishwasherFilter.value))) {
+    return false;
+  }
+  if (parkingFilter.checked && (!notice.offer.features || !notice.offer.features.includes(parkingFilter.value))) {
+    return false;
+  }
+  if (washerFilter.checked && (!notice.offer.features || !notice.offer.features.includes(washerFilter.value))) {
+    return false;
+  }
+  if (elevatorFilter.checked && (!notice.offer.features || !notice.offer.features.includes(elevatorFilter.value))) {
+    return false;
+  }
+  if (conditionerFilter.checked && (!notice.offer.features || !notice.offer.features.includes(conditionerFilter.value))) {
+    return false;
+  }
+
+  return true;
+};
+
 const renderFilteredData = (data) => debounce( () => {
   clearMarkerGroup();
-
-  const getBooleanValue = (elem, selector) => {
-    if (elem !== Number(selector.value) && selector.value !== 'any') {
-      return true;
-    }
-  };
-
   const filteredNotices = Array
     .from(data)
-    .filter((notice) => {
-      if (notice.offer.type !== typeFilter.value && typeFilter.value !== 'any') {
-        return false;
-      }
-      switch (priceFilter.value) {
-        case 'middle':
-          if (notice.offer.price <= MIN_PRICE_RANGE || notice.offer.price >= MAX_PRICE_RANGE) {
-            return false;
-          }
-          break;
-        case 'low':
-          if (notice.offer.price > MIN_PRICE_RANGE) {
-            return false;
-          }
-          break;
-        case 'high':
-          if (notice.offer.price < MAX_PRICE_RANGE) {
-            return false;
-          }
-          break;
-      }
-
-      getBooleanValue(notice.offer.rooms, roomsFilter);
-
-      // if (notice.offer.rooms !== Number(roomsFilter.value) && roomsFilter.value !== 'any') {
-      //   return false;
-      // }
-
-      if (notice.offer.guests !== Number(guestsFilter.value) && guestsFilter.value !== 'any') {
-        return false;
-      }
-      if (wifiFilter.checked && (!notice.offer.features || !notice.offer.features.includes(wifiFilter.value))) {
-        return false;
-      }
-      if (dishwasherFilter.checked && (!notice.offer.features || !notice.offer.features.includes(dishwasherFilter.value))) {
-        return false;
-      }
-      if (parkingFilter.checked && (!notice.offer.features || !notice.offer.features.includes(parkingFilter.value))) {
-        return false;
-      }
-      if (washerFilter.checked && (!notice.offer.features || !notice.offer.features.includes(washerFilter.value))) {
-        return false;
-      }
-      if (elevatorFilter.checked && (!notice.offer.features || !notice.offer.features.includes(elevatorFilter.value))) {
-        return false;
-      }
-      if (conditionerFilter.checked && (!notice.offer.features || !notice.offer.features.includes(conditionerFilter.value))) {
-        return false;
-      }
-
-      return true;
-    })
+    .filter(isAccordNoticeToFilter)
     .slice(0, SIMILAR_NOTICE_COUNT);
 
   renderMarkers(filteredNotices);
