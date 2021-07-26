@@ -1,6 +1,7 @@
 import {sendData} from './api.js';
+import {createHousingImage} from './avatar.js';
 import {MAX_PRICE_VALUE, MAX_TITLE_LENGTH, MIN_TITLE_LENGTH} from './constants.js';
-import {removeImages, previewImage, housingImage} from './avatar.js';
+import {removeImages, previewImage, housingImageContainer} from './avatar.js';
 import {setDefaultAddress, setDefaultMainMarker, setDefaultMap, clearMarkerGroup} from './map.js';
 import {resetFilterForm} from './map-filters.js';
 import {showSuccessMessage} from './popup-messages.js';
@@ -52,7 +53,8 @@ const setFormDefault = () => {
   setDefaultAddress();
   setDefaultMainMarker();
   setDefaultMap();
-  removeImages(previewImage, housingImage);
+  removeImages(previewImage, housingImageContainer);
+  createHousingImage();
   priceNoticeInput.value = '';
   for (const opt of typeNoticeInput.options) {
     if (opt.hasAttribute('selected')) {
@@ -178,6 +180,7 @@ const activateNoticeForm = () => {
   setDefaultAddress();
   validateForm();
   setUserFormSubmit(setFormDefaultButtonSubmit);
+  createHousingImage();
   buttonFormReset.addEventListener('click', (evt) => {
     evt.preventDefault();
     setFormDefault();

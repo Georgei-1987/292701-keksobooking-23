@@ -3,8 +3,16 @@ import {NUMBER_CHOOSING_FILE, FILE_TYPES} from './constants.js';
 const fileChooserAvatar = document.querySelector('#avatar');
 const fileChooserHousing = document.querySelector('#images');
 const previewImage = document.querySelector('.ad-form-header__preview img');
-const housingImage = document.querySelector('.ad-form__photo');
+const housingImageContainer = document.querySelector('.ad-form__photo');
 const anchorDefaultPreviewImage = previewImage.src;
+
+const createHousingImage = () => {
+  const housingImage = document.createElement('img');
+  housingImage.setAttribute('height', '70');
+  housingImage.setAttribute('width', '70');
+  housingImage.setAttribute('id', 'housing-image');
+  housingImageContainer.append(housingImage);
+};
 
 const removeImages = (containerAv, containerImg) => {
   containerAv.src = anchorDefaultPreviewImage;
@@ -19,7 +27,7 @@ const appointEvtListenerAvatar = (container, reader) => {
 
 const appointEvtListenerImage = (container, reader) => {
   reader.addEventListener('load', () => {
-    container.insertAdjacentHTML('beforeEnd', `<img src= ${reader.result} id="housing__image" alt="Фото жилья" width="70" height="70">`);
+    container.src = reader.result;
   });
 };
 
@@ -36,7 +44,7 @@ const renderImage = (chooser, container, marker) => {
       if (marker) {
         appointEvtListenerAvatar(container, reader);
       } else {
-        appointEvtListenerImage(container, reader);
+        appointEvtListenerImage(housingImageContainer.querySelector('#housing-image'), reader);
       }
 
       reader.readAsDataURL(file);
@@ -45,6 +53,6 @@ const renderImage = (chooser, container, marker) => {
 };
 
 renderImage(fileChooserAvatar, previewImage, true);
-renderImage(fileChooserHousing, housingImage, false);
+renderImage(fileChooserHousing, housingImageContainer, false);
 
-export {removeImages, previewImage, housingImage};
+export {createHousingImage, removeImages, previewImage, housingImageContainer};
